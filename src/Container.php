@@ -70,7 +70,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Check is the container parameter exists.
+     * Check is the parameter exists.
      *
      * @param string $name
      * @return bool
@@ -81,7 +81,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the container parameter.
+     * Get the parameter.
      *
      * @param string $name
      * @return mixed|null
@@ -92,7 +92,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the container parameters.
+     * Get parameters.
      *
      * @return mixed[]
      */
@@ -109,7 +109,7 @@ class Container implements ContainerInterface
      * @param bool     $singleton
      * @return self
      */
-    public function setFactory(string $id, Closure $factory, bool $singleton = false): self
+    public function setFactory($id, Closure $factory, bool $singleton = false): self
     {
         unset($this->instances[$id]);
 
@@ -142,7 +142,7 @@ class Container implements ContainerInterface
      * @param bool   $singleton
      * @return self
      */
-    public function setInterface(string $id, string $interface, bool $singleton = false): self
+    public function setInterface($id, string $interface, bool $singleton = false): self
     {
         return $this->setFactory($id, $this->getFactoryForInterface($interface), $singleton);
     }
@@ -153,7 +153,7 @@ class Container implements ContainerInterface
      * @param string $id
      * @return bool
      */
-    public function isSingleton(string $id): bool
+    public function isSingleton($id): bool
     {
         return isset($this->singletons[$id]) ? $this->singletons[$id] : false;
     }
