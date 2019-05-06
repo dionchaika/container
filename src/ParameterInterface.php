@@ -11,13 +11,10 @@
 
 namespace Dionchaika\Container;
 
+use Psr\Container\ContainerInterface;
+
 interface ParameterInterface
 {
-    /**
-     * @return string
-     */
-    public function getName(): string;
-
     /**
      * @param \Psr\Container\ContainerInterface $container
      * @return mixed

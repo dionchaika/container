@@ -11,6 +11,9 @@
 
 namespace Dionchaika\Container;
 
+use Closure;
+use Psr\Container\ContainerInterface;
+
 class Factory implements FactoryInterface
 {
     /**
@@ -19,14 +22,17 @@ class Factory implements FactoryInterface
     protected $closure;
 
     /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    protected $container;
-
-    /**
      * @var \Dionchaika\Container\ParameterCollection
      */
     protected $parameters;
+
+    /**
+     * @param \Closure $closure
+     */
+    public function __construct(Closure $closure)
+    {
+        $this->closure = $closure;
+    }
 
     /**
      * @param string         $name
@@ -40,6 +46,17 @@ class Factory implements FactoryInterface
     }
 
     /**
+     * @param string             $name
+     * @param ParameterInterface $parameter
+     * @return self
+     */
+    public function setParameter(string $name, ParameterInterface $parameter): self
+    {
+        $this->parameters->set($name, $parameter);
+        return $this;
+    }
+
+    /**
      * @param \Psr\Container\ContainerInterface $container
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -47,6 +64,6 @@ class Factory implements FactoryInterface
      */
     public function getInstance(ContainerInterface $container)
     {
-        return ($this->closure)($this->container, $this->parameters);
+        return ($this->closure)($container, $this->parameters);
     }
 }

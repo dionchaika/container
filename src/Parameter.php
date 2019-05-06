@@ -17,31 +17,16 @@ use Psr\Container\ContainerInterface;
 class Parameter implements ParameterInterface
 {
     /**
-     * @var string
-     */
-    protected $name;
-
-    /**
      * @var \Closure|mixed
      */
     protected $value;
 
     /**
-     * @param string         $name
      * @param \Closure|mixed $value
      */
-    public function __construct(string $name, $value)
+    public function __construct($value)
     {
-        $this->name = $name;
         $this->value = $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**

@@ -11,6 +11,8 @@
 
 namespace Dionchaika\Container;
 
+use Psr\Container\ContainerInterface;
+
 interface FactoryInterface
 {
     /**
