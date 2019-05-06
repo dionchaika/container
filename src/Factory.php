@@ -26,7 +26,7 @@ class Factory implements FactoryInterface
     protected $container;
 
     /**
-     * @var Dionchaika\Container\ParameterInterface[]
+     * @var \Dionchaika\Container\ParameterInterface[]
      */
     protected $parameters = [];
 
