@@ -21,7 +21,9 @@ use Psr\Container\ContainerInterface;
  *          ->asSingleton()
  *          ->bindParameter('passwd', $passwd)
  *          ->bindParameter('username', $username)
- *          ->bindParameter('dsn', 'mysql:host=localhost');
+ *          ->bindParameter('dsn', function ($container) {
+ *              return $container->getParameter('db.dsn');
+ *          });
  *
  *      if ($container->has('db')) {
  *          $db = $container->get('db');
