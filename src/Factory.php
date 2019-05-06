@@ -11,9 +11,6 @@
 
 namespace Dionchaika\Container;
 
-use Closure;
-use InvalidArgumentException;
-
 class Factory implements FactoryInterface
 {
     /**
