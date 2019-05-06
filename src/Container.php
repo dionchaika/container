@@ -110,7 +110,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Bind parameters to the container entry.
+     * Bind parameters.
      *
      * @param string  $id
      * @param mixed[] $parameters
@@ -165,11 +165,11 @@ class Container implements ContainerInterface
      */
     public function setInterface($id, string $interface, bool $singleton = false): self
     {
-        return $this->setFactory($id, $this->getFactoryForInterface($interface), $singleton);
+        return $this->setFactory($id, $this->getFactoryForInterface($id, $interface), $singleton);
     }
 
     /**
-     * Check is the container entry singleton.
+     * Check is the entry singleton.
      *
      * @param string $id
      * @return bool
@@ -180,18 +180,18 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Check is the container entry exists.
+     * Check is the entry exists.
      *
      * @param string $id
      * @return bool
      */
     public function has($id)
     {
-        return isset($this->instances[$id]) || isset($this->factories[$id]);
+        return isset($this->factories[$id]) || isset($this->instances[$id]);
     }
 
     /**
-     * Get the container entry.
+     * Get the entry.
      *
      * @param string $id
      * @return mixed
@@ -222,12 +222,13 @@ class Container implements ContainerInterface
     /**
      * Get a factory for the interface.
      *
+     * @param string $id
      * @param string $interface
      * @return \Closure
      */
-    protected function getFactoryForInterface(string $interface): Closure
+    protected function getFactoryForInterface($id, string $interface): Closure
     {
-        return function ($container) use ($interface) {
+        return function ($container) use ($id, $interface) {
             try {
 
                 $class = new ReflectionClass($interface);
@@ -240,7 +241,7 @@ class Container implements ContainerInterface
 
             if (!$class->isInstantiable()) {
                 throw new ContainerException(
-                    'Class is not instantiable: '.$interface.'!'
+                    'Entry is not instantiable: '.$interface.'!'
                 );
             }
 
@@ -249,7 +250,9 @@ class Container implements ContainerInterface
                 return new $interface;
             }
 
-            $parameters = array_map([$container, 'resolveParameter'], $constructor->getParameters());
+            $parameters = array_map(function ($parameter) use ($id, $container) {
+                return $container->resolveParameter($id, $parameter);
+            }, $constructor->getParameters());
 
             return $interface(...$parameters);
         };
