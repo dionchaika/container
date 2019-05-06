@@ -15,5 +15,8 @@ use Psr\Container\ContainerInterface;
 
 class Container implements ContainerInterface
 {
-    //
+    /**
+     * @var \Dionchaika\Container\Factory[]
+     */
+    protected $factories = [];
 }

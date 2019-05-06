@@ -11,7 +11,22 @@
 
 namespace Dionchaika\Container;
 
+use Closure;
+
 class Factory implements FactoryInterface
 {
-    //
+    /**
+     * @var \Closure
+     */
+    protected $closure;
+
+    /**
+     * @var \Psr\Container\ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var Dionchaika\Container\ParameterInterface[]
+     */
+    protected $parameters = [];
 }
