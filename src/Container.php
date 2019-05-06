@@ -19,9 +19,9 @@ use Psr\Container\ContainerInterface;
  *
  *      $container->bind('db', \PDO::class)
  *          ->asSingleton()
- *          ->bindParameter('dsn', 'mysql:host=localhost')
+ *          ->bindParameter('passwd', $passwd)
  *          ->bindParameter('username', $username)
- *          ->bindParameter('passwd', $passwd);
+ *          ->bindParameter('dsn', 'mysql:host=localhost');
  *
  *      if ($container->has('db')) {
  *          $db = $container->get('db');
