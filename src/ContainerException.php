@@ -14,9 +14,4 @@ namespace Dionchaika\Container;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 
-/**
- * The DI container exception class.
- *
- * @see https://www.php-fig.org/psr/psr-11/
- */
 class ContainerException extends Exception implements ContainerExceptionInterface {}

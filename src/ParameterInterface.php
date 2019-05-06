@@ -11,6 +11,15 @@
 
 namespace Dionchaika\Container;
 
-use Psr\Container\NotFoundExceptionInterface;
+interface ParameterInterface
+{
+    /**
+     * @return string
+     */
+    public function getName(): string;
 
-class NotFoundException extends ContainerException implements NotFoundExceptionInterface {}
+    /**
+     * @return mixed
+     */
+    public function getValue();
+}
