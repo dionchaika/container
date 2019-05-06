@@ -261,8 +261,8 @@ class Container implements ContainerInterface
     /**
      * Resolve a parameter.
      *
+     * @param string               $id
      * @param \ReflectionParameter $parameter
-     * @param string $id
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
