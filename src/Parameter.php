@@ -35,10 +35,10 @@ class Parameter implements ParameterInterface
      */
     public function getValue(ContainerInterface $container)
     {
-        if ($this->value instanceof Closure) {
-            return ($this->value)($container);
+        if (!($this->value instanceof Closure)) {
+            return $this->value;
         }
 
-        return $this->value;
+        return ($this->value)($container);
     }
 }
