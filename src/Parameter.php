@@ -35,7 +35,9 @@ class Parameter implements ParameterInterface
      */
     public function getValue(ContainerInterface $container)
     {
-        if (!($this->value instanceof Closure)) {
+        if (!($this->value
+            instanceof Closure
+        )) {
             return $this->value;
         }
 
