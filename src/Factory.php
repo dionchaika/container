@@ -18,18 +18,32 @@ namespace Dionchaika\Container;
 class Factory implements FactoryInterface
 {
     /**
-     * The factory ID.
+     * The factory identifier.
      *
      * @var string
      */
     protected $id;
 
     /**
-     * The factory closure.
+     * The factory alias name.
+     *
+     * @var string
+     */
+    protected $alias;
+
+    /**
+     * The factory closure instance.
      *
      * @var \Closure
      */
     protected $closure;
+
+    /**
+     * The factory container instance.
+     *
+     * @var \Psr\Container\ContainerInterface
+     */
+    protected $container;
 
     /**
      * The array of
