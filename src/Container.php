@@ -57,31 +57,48 @@ class Container implements ContainerInterface
     protected $parameters = [];
 
     /**
-     * Set a new instance.
+     * Set a new parameter.
      *
-     * @param string $id
-     * @param mixed  $instance
+     * @param string $name
+     * @param mixed  $value
      * @return self
      */
-    public function setInstance(string $id, $instance): self
+    public function setParameter(string $name, $value): self
     {
-        $this->instances[$id] = $instance;
-        $this->singletons[$id] = true;
-
+        $this->parameters[$name] = $value;
         return $this;
     }
 
     /**
-     * Set a new parameter.
+     * Check is the container parameter exists.
      *
-     * @param string $id
-     * @param mixed  $parameter
-     * @return self
+     * @param string $name
+     * @return bool
      */
-    public function setParameter(string $id, $parameter): self
+    public function hasParameter(string $name): bool
     {
-        $this->parameters[$id] = $parameter;
-        return $this;
+        return isset($this->parameters[$name]);
+    }
+
+    /**
+     * Get the container parameter.
+     *
+     * @param string $name
+     * @return mixed|null
+     */
+    public function getParameter(string $name)
+    {
+        return $this->hasParameter($name) ? $this->parameters[$name] : null;
+    }
+
+    /**
+     * Get the container parameters.
+     *
+     * @return mixed[]
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 
     /**
@@ -103,6 +120,21 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Set a new instance.
+     *
+     * @param string $id
+     * @param mixed  $instance
+     * @return self
+     */
+    public function setInstance($id, $instance): self
+    {
+        $this->instances[$id] = $instance;
+        $this->singletons[$id] = true;
+
+        return $this;
+    }
+
+    /**
      * Set a new interface.
      *
      * @param string $id
@@ -113,6 +145,17 @@ class Container implements ContainerInterface
     public function setInterface(string $id, string $interface, bool $singleton = false): self
     {
         return $this->setFactory($id, $this->getFactoryForInterface($interface), $singleton);
+    }
+
+    /**
+     * Check is the container entry singleton.
+     *
+     * @param string $id
+     * @return bool
+     */
+    public function isSingleton(string $id): bool
+    {
+        return isset($this->singletons[$id]) ? $this->singletons[$id] : false;
     }
 
     /**
@@ -153,49 +196,6 @@ class Container implements ContainerInterface
         }
 
         return $instance;
-    }
-
-    /**
-     * Check is the container entry singleton.
-     *
-     * @param string $id
-     * @return bool
-     */
-    public function isSingleton(string $id): bool
-    {
-        return isset($this->singletons[$id]) ? $this->singletons[$id] : false;
-    }
-
-    /**
-     * Check is the container parameter exists.
-     *
-     * @param string $id
-     * @return bool
-     */
-    public function hasParameter(string $id): bool
-    {
-        return isset($this->parameters[$id]);
-    }
-
-    /**
-     * Get the container parameter.
-     *
-     * @param string $id
-     * @return mixed|null
-     */
-    public function getParameter(string $id)
-    {
-        return $this->hasParameter($id) ? $this->parameters[$id] : null;
-    }
-
-    /**
-     * Get the container parameters.
-     *
-     * @return mixed[]
-     */
-    public function getParameters(): array
-    {
-        return $this->parameters;
     }
 
     /**
