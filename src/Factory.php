@@ -24,18 +24,18 @@ class Factory implements FactoryInterface
     protected $container;
 
     /**
-     * @var \Dionchaika\Container\ParameterInterface[]
+     * @var \Dionchaika\Container\ParameterCollection
      */
-    protected $parameters = [];
+    protected $parameters;
 
     /**
-     * @param string         $name
-     * @param \Closure|mixed $value
-     * @return self
+     * @param \Psr\Container\ContainerInterface $container
+     * @return mixed
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function bindParameter(string $name, $value): self
+    public function getInstance(ContainerInterface $container)
     {
-        $this->parameters[] = new Parameter($name, $value);
-        return $this;
+        
     }
 }
