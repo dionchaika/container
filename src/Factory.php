@@ -29,6 +29,17 @@ class Factory implements FactoryInterface
     protected $parameters;
 
     /**
+     * @param string         $name
+     * @param \Closure|mixed $value
+     * @return self
+     */
+    public function bindParameter(string $name, $value): self
+    {
+        $this->parameters->set($name, new Parameter($value));
+        return $this;
+    }
+
+    /**
      * @param \Psr\Container\ContainerInterface $container
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -36,6 +47,6 @@ class Factory implements FactoryInterface
      */
     public function getInstance(ContainerInterface $container)
     {
-        
+        return ($this->closure)($this->container, $this->parameters);
     }
 }
