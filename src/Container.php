@@ -41,7 +41,8 @@ class Container implements ContainerInterface
     protected $instances = [];
 
     /**
-     * The container singletons map.
+     * The container
+     * singletons map.
      *
      * @var mixed[]
      */
