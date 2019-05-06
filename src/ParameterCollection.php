@@ -21,11 +21,11 @@ class ParameterCollection
     /**
      * @param string                                   $name
      * @param \Dionchaika\Container\ParameterInterface $parameter
-     * @return void
+     * @return \Dionchaika\Container\ParameterInterface
      */
-    public function set(string $name, ParameterInterface $parameter)
+    public function set(string $name, ParameterInterface $parameter): ParameterInterface
     {
-        $this->parameters[$name] = $parameter;
+        return $this->parameters[$name] = $parameter;
     }
 
     /**
