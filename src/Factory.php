@@ -12,6 +12,7 @@
 namespace Dionchaika\Container;
 
 use Closure;
+use InvalidArgumentException;
 
 class Factory implements FactoryInterface
 {
@@ -31,13 +32,23 @@ class Factory implements FactoryInterface
     protected $parameters = [];
 
     /**
-     * @param string         $name
-     * @param \Closure|mixed $value
+     * @param \Dionchaika\Container\ParameterInterface|string $name
+     * @param \Closure|mixed                                  $value
      * @return self
+     * @throws \InvalidArgumentException
      */
-    public function bindParameter(string $name, $value): self
+    public function bindParameter($name, $value): self
     {
-        $this->parameters[$name] = new Parameter($name, $value);
+        if ($name instanceof ParameterInterface) {
+            $this->parameters[$name->getName()] = $name;
+        } else if (is_string($name)) {
+            $this->parameters[$name] = new Parameter($name, $value);
+        } else {
+            throw new InvalidArgumentException(
+                'Invalid parameter name! Parameter name must be a string.'
+            );
+        }
+
         return $this;
     }
 }
