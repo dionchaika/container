@@ -22,7 +22,11 @@ use Psr\Container\ContainerInterface;
  *          ->bindParameter('passwd', $passwd)
  *          ->bindParameter('username', $username)
  *          ->bindParameter('dsn', function ($container) {
- *              return $container->getParameter('db.dsn');
+ *              $host = $container->getParameter('db.host');
+ *              $dbname = $container->getParameter('db.name');
+ *              $charset = $container->getParameter('db.charset');
+ *
+ *              return "mysql:host={$host};dbname={$dbname};charset={$charset}";
  *          });
  *
  *      if ($container->has('db')) {
