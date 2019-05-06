@@ -32,23 +32,13 @@ class Factory implements FactoryInterface
     protected $parameters = [];
 
     /**
-     * @param \Dionchaika\Container\ParameterInterface|string $name
-     * @param \Closure|mixed                                  $value
+     * @param string         $name
+     * @param \Closure|mixed $value
      * @return self
-     * @throws \InvalidArgumentException
      */
-    public function bindParameter($name, $value): self
+    public function bindParameter(string $name, $value): self
     {
-        if ($name instanceof ParameterInterface) {
-            $this->parameters[$name->getName()] = $name;
-        } else if (is_string($name)) {
-            $this->parameters[$name] = new Parameter($name, $value);
-        } else {
-            throw new InvalidArgumentException(
-                'Invalid parameter name! Parameter name must be a string.'
-            );
-        }
-
+        $this->parameters[] = new Parameter($name, $value);
         return $this;
     }
 }
