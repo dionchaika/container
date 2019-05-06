@@ -1,0 +1,32 @@
+{
+    "name": "dionchaika/container",
+    "description": "The PSR-11 DI Container",
+    "keywords": [
+        "php",
+        "psr",
+        "psr-11",
+        "di",
+        "container",
+        "dependency injection",
+        "dependency injection container"
+    ],
+    "homepage": "https://github.com/dionchaika/container",
+    "version": "v1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dion Chaika",
+            "email": "dionchaika@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Dionchaika\\Container\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.1.3",
+        "psr/container": "^1.0"
+    }
+}
