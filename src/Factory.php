@@ -29,4 +29,15 @@ class Factory implements FactoryInterface
      * @var Dionchaika\Container\ParameterInterface[]
      */
     protected $parameters = [];
+
+    /**
+     * @param string         $name
+     * @param \Closure|mixed $value
+     * @return self
+     */
+    public function bindParameter(string $name, $value): self
+    {
+        $this->parameters[$name] = new Parameter($name, $value);
+        return $this;
+    }
 }

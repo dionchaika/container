@@ -19,7 +19,8 @@ interface ParameterInterface
     public function getName(): string;
 
     /**
+     * @param \Psr\Container\ContainerInterface $container
      * @return mixed
      */
-    public function getValue();
+    public function getValue(ContainerInterface $container);
 }

@@ -14,9 +14,10 @@ namespace Dionchaika\Container;
 interface FactoryInterface
 {
     /**
+     * @param \Psr\Container\ContainerInterface $container
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function getInstance();
+    public function getInstance(ContainerInterface $container);
 }
