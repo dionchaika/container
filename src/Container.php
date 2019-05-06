@@ -57,6 +57,14 @@ class Container implements ContainerInterface
     protected $parameters = [];
 
     /**
+     * The array
+     * of container bound parameters.
+     *
+     * @var mixed[]
+     */
+    protected $boundParameters = [];
+
+    /**
      * Set a new parameter.
      *
      * @param string $name
@@ -99,6 +107,19 @@ class Container implements ContainerInterface
     public function getParameters(): array
     {
         return $this->parameters;
+    }
+
+    /**
+     * Bind parameters to the container entry.
+     *
+     * @param string  $id
+     * @param mixed[] $parameters
+     * @return self
+     */
+    public function bindParameters($id, array $parameters): self
+    {
+        $this->boundParameters[$id] = $parameters;
+        return $this;
     }
 
     /**
@@ -238,11 +259,12 @@ class Container implements ContainerInterface
      * Resolve a parameter.
      *
      * @param \ReflectionParameter $parameter
+     * @param string $id
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    protected function resolveParameter(ReflectionParameter $parameter)
+    protected function resolveParameter(ReflectionParameter $parameter, $id)
     {
         $class = $parameter->getClass();
         if (null === $class) {
@@ -250,8 +272,8 @@ class Container implements ContainerInterface
                 return $parameter->getDefaultValue();
             }
 
-            if (isset($this->parameters[$parameter->name])) {
-                return $this->parameters[$parameter->name];
+            if (isset($this->boundParameters[$id][$parameter->name])) {
+                return $this->boundParameters[$id][$parameter->name];
             }
 
             throw new ContainerException(
