@@ -241,7 +241,7 @@ class Container implements ContainerInterface
 
             if (!$class->isInstantiable()) {
                 throw new ContainerException(
-                    'Entry is not instantiable: '.$interface.'!'
+                    'Entry is not instantiable: '.$id.'!'
                 );
             }
 
@@ -254,7 +254,7 @@ class Container implements ContainerInterface
                 return $container->resolveParameter($id, $parameter);
             }, $constructor->getParameters());
 
-            return $interface(...$parameters);
+            return new $interface(...$parameters);
         };
     }
 
@@ -267,7 +267,7 @@ class Container implements ContainerInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    protected function resolveParameter(ReflectionParameter $parameter, $id)
+    protected function resolveParameter($id, ReflectionParameter $parameter)
     {
         $class = $parameter->getClass();
         if (null === $class) {
@@ -280,7 +280,7 @@ class Container implements ContainerInterface
             }
 
             throw new ContainerException(
-                'Parameter is not set: '.$parameter->name.'!'
+                'Parameter of entry "'.$id.'" is not bound: '.$parameter->name.'!'
             );
         }
 
