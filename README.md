@@ -16,19 +16,68 @@ require_once 'vendor/autoload.php';
 ```
 
 ## Basic usage
+
+1. Simple binding:
+```php
+
+$container = new Container;
+
+$container->bind('SomeClass');
+$container->bind(AnotherClass::class);
+
+//
+// Binding a singleton:
+//
+$container->bind('SomeClass')
+    ->asSingleton();
+
+//
+// or use singleton method:
+//
+$container->singleton(AnotherClass::class);
+
+//
+// To resolve the instance call get method:
+//
+if ($container->has('SomeClass')) {
+    $instance = $container->get('SomeClass');
+}
+
+//
+// You can also resolve the instance without binding:
+//
+$instance = $container->resolve('OneMoreClass');
+```
+
+2. Binding a closure:
 ```php
 <?php
 
 $container = new Container;
 
-$container
-    ->bind('db', 'PDO')
-    ->asSingleton()
-    ->bindParameter('dsn', 'mysql:host=localhost')
-    ->bindParameter('username', 'root')
-    ->bindParameter('passwd', '');
+$container->bind('SomeClass', function () {
+    return new SomeClass;
+});
 
-if ($container->has('db')) {
-    $db = $container->get('db');
-}
+//
+// You can pass a container instance
+// as a second parameter of closure:
+//
+$container->bind(AnotherClass::class, function ($container) {
+    return new AnotherClass($container->get('SomeClass'));
+});
+```
+
+3. Binding an interface:
+```php
+<?php
+
+$container = new Container;
+
+$container->bind('SomeClass', 'SomeInterface');
+
+//
+// Or use an alias name of the interface:
+//
+$container->bind('logger', '\Psr\Log\LoggerInterface');
 ```
