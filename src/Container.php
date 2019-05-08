@@ -102,6 +102,20 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Bind a new singleton type to the container.
+     *
+     * An alias method name to bind.
+     *
+     * @param string                     $id
+     * @param \Closure|string|mixed|null $type
+     * @return \Dionchaika\Container\Interfaces\FactoryInterface
+     */
+    public function singleton(string $id, $type = null): FactoryInterface
+    {
+        return $this->bind($id, $type, true);
+    }
+
+    /**
      * Check is the type
      * exists in the container.
      *
@@ -114,19 +128,23 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the instance of the type.
+     * Resolve the instance of the type.
      *
-     * @param string $id
+     * @param string  $id
+     * @param mixed[] $parameters
      * @return mixed
-     * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function get($id)
+    public function resolve(string $id, array $parameters = [])
     {
         if (!$this->has($id)) {
-            throw new NotFoundException(
-                'Type is not exists in the container: '.$id.'!'
-            );
+            $this->bind($id);
+
+            foreach ($parameters as $name => $value) {
+                $this->factories
+                    ->get($id)
+                    ->bindParameter($name, $value);
+            }
         }
 
         if (isset($this->instances[$id])) {
@@ -146,6 +164,25 @@ class Container implements ContainerInterface
         }
 
         return $instance;
+    }
+
+    /**
+     * Get the instance of the type.
+     *
+     * @param string $id
+     * @return mixed
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    public function get($id)
+    {
+        if (!$this->has($id)) {
+            throw new NotFoundException(
+                'Type is not exists in the container: '.$id.'!'
+            );
+        }
+
+        return $this->resolve($id);
     }
 
     /**

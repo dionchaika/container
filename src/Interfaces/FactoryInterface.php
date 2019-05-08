@@ -31,6 +31,15 @@ interface FactoryInterface
     public function isSingleton(): bool;
 
     /**
+     * Bind a parameter.
+     *
+     * @param string         $name
+     * @param \Closure|mixed $value
+     * @return self
+     */
+    public function bindParameter(string $name, $value): self;
+
+    /**
      * Get the instance.
      *
      * @param \Psr\Container\ContainerInterface $container
