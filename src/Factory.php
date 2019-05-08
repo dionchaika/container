@@ -60,6 +60,16 @@ class Factory implements FactoryInterface
     }
 
     /**
+     * Get the factory name.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * Manage the resolved
      * instance as a singleton.
      *
