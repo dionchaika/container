@@ -119,6 +119,6 @@ $container->bind('some_class', function ($container, $parameters) {
         $container->get('AnotherClass'),
         $parameters->get('id')->getValue(),
         $parameters->get('name')->getValue()
-    )
+    );
 })->bindParameter('id', 10)->bindParameter('name', 'Max');
 ```
