@@ -11,6 +11,7 @@
 
 namespace Dionchaika\Container;
 
+use Closure;
 use Psr\Container\ContainerInterface;
 use Dionchaika\Container\Resolvers\ConstructorResolver;
 
@@ -61,6 +62,16 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Get the container resolver.
+     *
+     * @return \Dionchaika\Container\ResolverInterface
+     */
+    public function getResolver(): ResolverInterface
+    {
+        return $this->resolver;
+    }
+
+    /**
      * Bind a new type.
      *
      * @param string                     $id
@@ -70,6 +81,46 @@ class Container implements ContainerInterface
      */
     public function bind($id, $type = null, bool $singleton = false): Factory
     {
-        
+        $type = $type ?? $id;
+
+        if (!($type instanceof Closure)) {
+            $type = is_string($type)
+                ? $this->getClosureForType($type)
+                : $this->getClosureForInstance($type);
+
+            $singleton = is_string($type) ? $singleton : true;
+        }
+
+        return $this->factories[] = new Factory($id, $type, $singleton);
+    }
+
+    /**
+     * Get the closure for type.
+     *
+     * @param string $type
+     * @return \Closure
+     */
+    protected function getClosureForType($type): Closure
+    {
+        return function ($container, $parameters) use ($type) {
+            return $container->getResolver()->resolve(
+                $container,
+                $type,
+                $parameters
+            );
+        };
+    }
+
+    /**
+     * Get the closure for an instance.
+     *
+     * @param mixed $instance
+     * @return \Closure
+     */
+    protected function getClosureForInstance($instance): Closure
+    {
+        return function () use ($instance) {
+            return $instance;
+        };
     }
 }
