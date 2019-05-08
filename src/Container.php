@@ -126,8 +126,15 @@ class Container implements ContainerInterface
             return $this->instances[$id];
         }
 
-        $instance = $this->factories->get($id)->getInstance($this);
-        if ($this->factories->get($id)->isSingleton()) {
+        $instance = $this->factories
+            ->get($id)
+            ->getInstance($this);
+
+        if (
+            $this->factories
+                ->get($id)
+                ->isSingleton()
+        ) {
             $this->instances[$id] = $instance;
         }
 
@@ -143,7 +150,9 @@ class Container implements ContainerInterface
     protected function getClosureForType(string $type): Closure
     {
         return function ($container, $parameters) use ($type) {
-            return $container->getResolver()->resolve($container, $type, $parameters);
+            return $container
+                ->getResolver()
+                ->resolve($container, $type, $parameters);
         };
     }
 
@@ -155,8 +164,6 @@ class Container implements ContainerInterface
      */
     protected function getClosureForInstance($instance): Closure
     {
-        return function () use ($instance) {
-            return $instance;
-        };
+        return function () use ($instance) { return $instance; };
     }
 }
