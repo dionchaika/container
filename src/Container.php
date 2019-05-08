@@ -15,38 +15,17 @@ use Closure;
 use Psr\Container\ContainerInterface;
 use Dionchaika\Container\Resolvers\ConstructorResolver;
 
-/**
- * <code>
- *      $container = new Container;
- *
- *      $container->bind('db', \PDO::class)
- *          ->asSingleton()
- *          ->bindParameter('passwd', $passwd)
- *          ->bindParameter('username', $username)
- *          ->bindParameter('dsn', function ($container) {
- *              $host = $container->getParameter('db.host');
- *              $dbname = $container->getParameter('db.name');
- *              $charset = $container->getParameter('db.charset');
- *
- *              return "mysql:host={$host};dbname={$dbname};charset={$charset}";
- *          });
- *
- *      if ($container->has('db')) {
- *          $db = $container->get('db');
- *      }
- * </code>
- */
 class Container implements ContainerInterface
 {
     /**
-     * The container resolver.
+     * The instance resolver.
      *
      * @var \Dionchaika\Container\ResolverInterface
      */
     protected $resolver;
 
     /**
-     * The container factories.
+     * The instance factories.
      *
      * @var \Dionchaika\Container\FactoryCollection
      */
@@ -61,16 +40,26 @@ class Container implements ContainerInterface
     protected $instances = [];
 
     /**
-     * @param \Dionchaika\Container\ResolverInterface|null $resolver
+     * @param mixed[] $config
      */
-    public function __construct(?ResolverInterface $resolver = null)
+    public function __construct(array $config = [])
     {
-        $this->factories = new FactoryCollection;
-        $this->resolver = $resolver ?? new ConstructorResolver;
+        if (
+            isset($config['resolver']) &&
+            $config['resolver'] instanceof ResolverInterface
+        ) {
+            $this->resolver = $config['resolver'];
+        } else {
+            $this->resolver = new ConstructorResolver;
+        }
+
+        $this->factories = new FactoryCollection(
+            isset($config['factories']) ? $config['factories'] : []
+        );
     }
 
     /**
-     * Get the container resolver.
+     * Get the instance resolver.
      *
      * @return \Dionchaika\Container\ResolverInterface
      */
@@ -80,59 +69,41 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the container factories.
-     *
-     * @return \Dionchaika\Container\FactoryCollection
-     */
-    public function getFactories(): FactoryCollection
-    {
-        return $this->factories;
-    }
-
-    /**
-     * Get the array
-     * of resolved instances.
-     *
-     * @return mixed[]
-     */
-    public function getInstances(): array
-    {
-        return $this->instances;
-    }
-
-    /**
-     * Bind a new type.
+     * Bind a new type to the container.
      *
      * @param string                     $id
      * @param \Closure|string|mixed|null $type
      * @param bool                       $singleton
-     * @return \Dionchaika\Container\Factory
+     * @return \Dionchaika\Container\FactoryInterface
      */
-    public function bind($id, $type = null, bool $singleton = false): Factory
+    public function bind(string $id, $type = null, bool $singleton = false): FactoryInterface
     {
         unset($this->instances[$id]);
 
         $type = $type ?? $id;
 
         if (!($type instanceof Closure)) {
-            $type = is_string($type)
-                ? $this->getClosureForType($type)
-                : $this->getClosureForInstance($type);
+            if (is_string($type)) {
+                $type = $this->getClosureForType($type);
+            } else {
+                $type = $this->getClosureForInstance($type);
+                $singleton = true;
+            }
         }
 
-        $this->factories->set($id, new Factory($id, $type, $singleton));
-        return $this->factories->get($id);
+        return $this->factories->set($id, new Factory($id, $type, $singleton));
     }
 
     /**
-     * Check is the type exists.
+     * Check is the type
+     * exists in the container.
      *
      * @param string $id
      * @return bool
      */
     public function has($id)
     {
-        return $this->factories->has($id) || isset($this->instances[$id]);
+        return isset($this->instances[$id]) || $this->factories->has($id);
     }
 
     /**
@@ -147,7 +118,7 @@ class Container implements ContainerInterface
     {
         if (!$this->has($id)) {
             throw new NotFoundException(
-                'Type is not exists: '.$id.'!'
+                'Type is not exists in the container: '.$id.'!'
             );
         }
 
@@ -164,12 +135,12 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the closure for type.
+     * Get the closure for the type.
      *
      * @param string $type
      * @return \Closure
      */
-    protected function getClosureForType($type): Closure
+    protected function getClosureForType(string $type): Closure
     {
         return function ($container, $parameters) use ($type) {
             return $container->getResolver()->resolve(
@@ -181,7 +152,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the closure for an instance.
+     * Get the closure for the instance.
      *
      * @param mixed $instance
      * @return \Closure
