@@ -14,9 +14,9 @@ namespace Dionchaika\Container\Resolvers;
 use ReflectionClass;
 use ReflectionException;
 use Psr\Container\ContainerInterface;
-use Dionchaika\Container\ResolverInterface;
 use Dionchaika\Container\ContainerException;
 use Dionchaika\Container\ParameterCollection;
+use Dionchaika\Container\Interfaces\ResolverInterface;
 
 class ConstructorResolver implements ResolverInterface
 {
@@ -59,11 +59,7 @@ class ConstructorResolver implements ResolverInterface
         }
 
         $callback = function ($parameter) use ($container, $boundParameters) {
-            return $this->resolveParameter(
-                $container,
-                $parameter,
-                $boundParameters
-            );
+            return $this->resolveParameter($container, $parameter, $boundParameters);
         };
 
         $parameters = array_map($callback, $constructor->getParameters());

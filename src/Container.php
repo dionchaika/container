@@ -14,6 +14,7 @@ namespace Dionchaika\Container;
 use Closure;
 use Psr\Container\ContainerInterface;
 use Dionchaika\Container\Interfaces\FactoryInterface;
+use Dionchaika\Container\Interfaces\ResolverInterface;
 use Dionchaika\Container\Resolvers\ConstructorResolver;
 
 class Container implements ContainerInterface
@@ -21,7 +22,7 @@ class Container implements ContainerInterface
     /**
      * The instance resolver.
      *
-     * @var \Dionchaika\Container\ResolverInterface
+     * @var \Dionchaika\Container\Interfaces\ResolverInterface
      */
     protected $resolver;
 
@@ -62,7 +63,7 @@ class Container implements ContainerInterface
     /**
      * Get the instance resolver.
      *
-     * @return \Dionchaika\Container\ResolverInterface
+     * @return \Dionchaika\Container\Interfaces\ResolverInterface
      */
     public function getResolver(): ResolverInterface
     {
@@ -75,7 +76,7 @@ class Container implements ContainerInterface
      * @param string                     $id
      * @param \Closure|string|mixed|null $type
      * @param bool                       $singleton
-     * @return \Dionchaika\Container\FactoryInterface
+     * @return \Dionchaika\Container\Interfaces\FactoryInterface
      */
     public function bind(string $id, $type = null, bool $singleton = false): FactoryInterface
     {
