@@ -31,13 +31,6 @@ class Factory implements FactoryInterface
     protected $closure;
 
     /**
-     * The resolved instance.
-     *
-     * @var mixed|null
-     */
-    protected $instance;
-
-    /**
      * Is the resolved
      * instance should be
      * managed as a singleton.
@@ -122,15 +115,6 @@ class Factory implements FactoryInterface
      */
     public function getInstance(ContainerInterface $container)
     {
-        if (null !== $this->instance) {
-            return $this->instance;
-        }
-
-        $instance = ($this->closure)($container, $this->parameters);
-        if ($this->singleton) {
-            $this->instance = $instance;
-        }
-
-        return $instance;
+        return ($this->closure)($container, $this->parameters);
     }
 }

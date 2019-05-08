@@ -47,6 +47,14 @@ class Container implements ContainerInterface
 
     /**
      * The array
+     * of resolved instances.
+     *
+     * @var mixed[]
+     */
+    protected $instances = [];
+
+    /**
+     * The array
      * of container factories.
      *
      * @var \Dionchaika\Container\FactoryInterface[]
@@ -69,6 +77,26 @@ class Container implements ContainerInterface
     public function getResolver(): ResolverInterface
     {
         return $this->resolver;
+    }
+
+    /**
+     * Get the resolved instances.
+     *
+     * @return mixed[]
+     */
+    public function getInstances(): array
+    {
+        return $this->instances;
+    }
+
+    /**
+     * Get the container factories.
+     *
+     * @return \Dionchaika\Container\FactoryInterface[]
+     */
+    public function getFactories(): array
+    {
+        return $this->factories;
     }
 
     /**
@@ -109,6 +137,13 @@ class Container implements ContainerInterface
                 $parameters
             );
         };
+    }
+
+    public function resolve($id)
+    {
+        foreach ($this->factories as $factory) {
+            
+        }
     }
 
     /**
