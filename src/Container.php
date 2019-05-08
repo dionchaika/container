@@ -46,20 +46,19 @@ class Container implements ContainerInterface
     protected $resolver;
 
     /**
+     * The container factories.
+     *
+     * @var \Dionchaika\Container\FactoryCollection
+     */
+    protected $factories;
+
+    /**
      * The array
      * of resolved instances.
      *
      * @var mixed[]
      */
     protected $instances = [];
-
-    /**
-     * The array
-     * of container factories.
-     *
-     * @var \Dionchaika\Container\FactoryInterface[]
-     */
-    protected $factories = [];
 
     /**
      * @param \Dionchaika\Container\ResolverInterface|null $resolver
@@ -80,23 +79,23 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the resolved instances.
+     * Get the container factories.
+     *
+     * @return \Dionchaika\Container\FactoryCollection
+     */
+    public function getFactories(): FactoryCollection
+    {
+        return $this->factories;
+    }
+
+    /**
+     * Get the array resolved instances.
      *
      * @return mixed[]
      */
     public function getInstances(): array
     {
         return $this->instances;
-    }
-
-    /**
-     * Get the container factories.
-     *
-     * @return \Dionchaika\Container\FactoryInterface[]
-     */
-    public function getFactories(): array
-    {
-        return $this->factories;
     }
 
     /**
@@ -109,6 +108,8 @@ class Container implements ContainerInterface
      */
     public function bind($id, $type = null, bool $singleton = false): Factory
     {
+        unset($this->instances[$id]);
+
         $type = $type ?? $id;
 
         if (!($type instanceof Closure)) {
@@ -119,7 +120,47 @@ class Container implements ContainerInterface
             $singleton = is_string($type) ? $singleton : true;
         }
 
-        return $this->factories[] = new Factory($id, $type, $singleton);
+        $this->factories->set($id, new Factory($id, $type, $singleton));
+        return $this->factories->get($id);
+    }
+
+    /**
+     * Check is the type exists.
+     *
+     * @param string $id
+     * @return bool
+     */
+    public function has($id)
+    {
+        return isset($this->instances[$id]) || $this->factories->has($id);
+    }
+
+    /**
+     * Get the instance of the type.
+     *
+     * @param string $id
+     * @return mixed
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    public function get($id)
+    {
+        if (!$this->has($id)) {
+            throw new NotFoundException(
+                'Type is not found: '.$id.'!'
+            );
+        }
+
+        if (isset($this->instances[$id])) {
+            return $this->instances[$id];
+        }
+
+        $instance = $this->factories->get($id)->getInstance($this);
+        if ($this->factories->get($id)->isSingleton()) {
+            $this->instances[$id] = $instance;
+        }
+
+        return $instance;
     }
 
     /**
@@ -137,13 +178,6 @@ class Container implements ContainerInterface
                 $parameters
             );
         };
-    }
-
-    public function resolve($id)
-    {
-        foreach ($this->factories as $factory) {
-            
-        }
     }
 
     /**

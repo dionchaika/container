@@ -16,6 +16,7 @@ use ReflectionException;
 use Psr\Container\ContainerInterface;
 use Dionchaika\Container\ResolverInterface;
 use Dionchaika\Container\ContainerException;
+use Dionchaika\Container\ParameterCollection;
 
 class ConstructorResolver implements ResolverInterface
 {
@@ -24,15 +25,18 @@ class ConstructorResolver implements ResolverInterface
     /**
      * Resolve an instance of the type.
      *
-     * @param \Psr\Container\ContainerInterface          $container
-     * @param string                                     $type
-     * @param \Dionchaika\Container\ParameterInterface[] $boundParameters
+     * @param \Psr\Container\ContainerInterface              $container
+     * @param string                                         $type
+     * @param \Dionchaika\Container\ParameterCollection|null $boundParameters
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function resolve(ContainerInterface $container, string $type, array $boundParameters = [])
-    {
+    public function resolve(
+        ContainerInterface $container,
+        string $type,
+        ?ParameterCollection $boundParameters = null
+    ) {
         try {
             $class = new ReflectionClass($type);
         } catch (ReflectionException $e) {

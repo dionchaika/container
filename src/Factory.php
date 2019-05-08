@@ -40,12 +40,11 @@ class Factory implements FactoryInterface
     protected $singleton = false;
 
     /**
-     * The array
-     * of factory parameters.
+     * The factory parameters.
      *
-     * @var \Dionchaika\Container\ParameterInterface[]
+     * @var \Dionchaika\Container\ParameterCollection
      */
-    protected $parameters = [];
+    protected $parameters;
 
     /**
      * @param string   $name
@@ -101,7 +100,7 @@ class Factory implements FactoryInterface
      */
     public function bindParameter(string $name, $value): self
     {
-        $this->parameters[] = new Parameter($name, $value);
+        $this->parameters->set($name, new Parameter($name, $value));
         return $this;
     }
 

@@ -15,21 +15,25 @@ use ReflectionParameter;
 use ReflectionException;
 use Psr\Container\ContainerInterface;
 use Dionchaika\Container\ContainerException;
+use Dionchaika\Container\ParameterCollection;
 
 trait ResolverTrait
 {
     /**
      * Resolve a parameter.
      *
-     * @param \Psr\Container\ContainerInterface          $container
-     * @param \ReflectionParameter                       $parameter
-     * @param \Dionchaika\Container\ParameterInterface[] $boundParameters
+     * @param \Psr\Container\ContainerInterface              $container
+     * @param \ReflectionParameter                           $parameter
+     * @param \Dionchaika\Container\ParameterCollection|null $boundParameters
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function resolveParameter(ContainerInterface $container, ReflectionParameter $parameter, $boundParameters = [])
-    {
+    public function resolveParameter(
+        ContainerInterface $container,
+        ReflectionParameter $parameter,
+        ?ParameterCollection $boundParameters = null
+    ) {
         $class = $parameter->getClass();
         if (null === $class) {
             if ($parameter->isDefaultValueAvailable()) {
@@ -40,9 +44,9 @@ trait ResolverTrait
                 }
             }
 
-            foreach ($boundParameters as $boundParameter) {
-                if ($boundParameter->getName() === $parameter->name) {
-                    return $boundParameter->getValue($container);
+            if (null !== $boundParameters) {
+                if ($boundParameters->has($parameter->name)) {
+                    return $boundParameters->get($parameter->name);
                 }
             }
 
