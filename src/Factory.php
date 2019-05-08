@@ -13,6 +13,7 @@ namespace Dionchaika\Container;
 
 use Closure;
 use Psr\Container\ContainerInterface;
+use Dionchaika\Container\Interfaces\FactoryInterface;
 
 class Factory implements FactoryInterface
 {
@@ -102,7 +103,7 @@ class Factory implements FactoryInterface
      */
     public function bindParameter(string $name, $value): self
     {
-        $this->parameters->set($name, new Parameter($name, $value));
+        $this->parameters->set(new Parameter($name, $value));
         return $this;
     }
 

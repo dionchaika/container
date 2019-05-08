@@ -13,6 +13,7 @@ namespace Dionchaika\Container;
 
 use Closure;
 use Psr\Container\ContainerInterface;
+use Dionchaika\Container\Interfaces\ParameterInterface;
 
 class Parameter implements ParameterInterface
 {

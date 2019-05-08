@@ -13,6 +13,7 @@ namespace Dionchaika\Container;
 
 use Closure;
 use Psr\Container\ContainerInterface;
+use Dionchaika\Container\Interfaces\FactoryInterface;
 use Dionchaika\Container\Resolvers\ConstructorResolver;
 
 class Container implements ContainerInterface
@@ -91,7 +92,7 @@ class Container implements ContainerInterface
             }
         }
 
-        return $this->factories->set($id, new Factory($id, $type, $singleton));
+        return $this->factories->set(new Factory($id, $type, $singleton));
     }
 
     /**
@@ -147,7 +148,7 @@ class Container implements ContainerInterface
      * @param string $type
      * @return \Closure
      */
-    protected function getClosureForType(string $type): Closure
+    protected function getClosureForType($type): Closure
     {
         return function ($container, $parameters) use ($type) {
             return $container

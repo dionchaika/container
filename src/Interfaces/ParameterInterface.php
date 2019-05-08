@@ -9,19 +9,24 @@
  * @author Dion Chaika <dionchaika@gmail.com>
  */
 
-namespace Dionchaika\Container;
+namespace Dionchaika\Container\Interfaces;
 
 use Psr\Container\ContainerInterface;
 
-interface FactoryInterface
+interface ParameterInterface
 {
     /**
-     * Get the instance.
+     * Get the parameter name.
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
+     * Get the parameter value.
      *
      * @param \Psr\Container\ContainerInterface $container
      * @return mixed
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function getInstance(ContainerInterface $container);
+    public function getValue(ContainerInterface $container);
 }
