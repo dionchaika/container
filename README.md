@@ -61,7 +61,7 @@ $container->bind('SomeClass', function () {
 
 //
 // You can pass a container instance
-// as a second parameter of the closure:
+// as the first argument of the closure:
 //
 $container->bind(AnotherClass::class, function ($container) {
     return new AnotherClass($container->get('SomeClass'));
@@ -80,4 +80,45 @@ $container->bind('SomeClass', 'SomeInterface');
 // Or use an alias name of the interface:
 //
 $container->bind('logger', '\Psr\Log\LoggerInterface');
+
+//
+// Will resolve an instance of \Psr\Log\LoggerInterface:
+//
+$logger = $container->get('logger');
+```
+
+4. Binding parameters:
+```php
+<?php
+
+class SomeClass
+{
+    /**
+     * @param \AnotherClass $anotherClass
+     * @param int           $id
+     * @param string        $name
+     */
+    public function __construct(AnotherClass $anotherClass, int $id, string $name)
+    {
+        //
+    }
+}
+
+$container = new Container;
+
+$container->bind('some_class', 'SomeClass')
+    ->bindParameter('id', 10)
+    ->bindParameter('name', 'Max');
+
+//
+// You can pass a parameter collection
+// as the second argument of the closure:
+//
+$container->bind('some_class', function ($container, $parameters) {
+    return new SomeClass(
+        $container->get('AnotherClass'),
+        $parameters->get('id')->getValue(),
+        $parameters->get('name')->getValue()
+    )
+})->bindParameter('id', 10)->bindParameter('name', 'Max');
 ```
