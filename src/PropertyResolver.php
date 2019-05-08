@@ -13,41 +13,43 @@ namespace Dionchaika\Container;
 
 use ReflectionClass;
 use ReflectionException;
+use Psr\Container\ContainerInterface;
 
-class PropertyResolver
+class PropertyResolver implements ResolverInterface
 {
+    use ResolverTrait;
+
     /**
-     * @param string $interface
+     * Resolve an instance of the type.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     * @param string                            $type
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function resolve(string $interface)
+    public function resolve(ContainerInterface $container, string $type)
     {
         try {
-            $class = new ReflectionClass($interface);
+            $class = new ReflectionClass($type);
         } catch (ReflectionException $e) {
             throw new ContainerException($e->getMessage());
         }
 
         if (!$class->isInstantiable()) {
             throw new ContainerException(
-                'Entry is not instantiable: '.$interface.'!'
+                'Type is not instantiable: '.$type.'!'
             );
         }
 
-        $instance = new $interface;
+        $instance = new $type;
 
         foreach ($class->getProperties() as $property) {
             if (preg_match('/\@var +([\w\\]+)/', $property->getDocComment(), $matches)) {
-                $class = $matches[1];
-
-                if ($this->container->has($class)) {
-                    $property->setValue($instance, $this->container->get($class));
-                }
+                $property->setValue($instance, $this->resolveProperty($container, $matches[1]));
             }
         }
 
-        return $interface;
+        return $instance;
     }
 }
