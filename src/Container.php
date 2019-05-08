@@ -133,7 +133,7 @@ class Container implements ContainerInterface
      */
     public function has($id)
     {
-        return isset($this->instances[$id]) || $this->factories->has($id);
+        return $this->factories->has($id) || isset($this->instances[$id]);
     }
 
     /**
