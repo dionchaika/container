@@ -46,7 +46,7 @@ trait ResolverTrait
 
             if (null !== $boundParameters) {
                 if ($boundParameters->has($parameter->name)) {
-                    return $boundParameters->get($parameter->name);
+                    return $boundParameters->get($parameter->name)->getValue($container);
                 }
             }
 
