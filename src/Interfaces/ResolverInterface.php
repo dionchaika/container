@@ -12,6 +12,7 @@
 namespace Dionchaika\Container\Interfaces;
 
 use Psr\Container\ContainerInterface;
+use Dionchaika\Container\ParameterCollection;
 
 interface ResolverInterface
 {
