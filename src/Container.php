@@ -148,7 +148,7 @@ class Container implements ContainerInterface
     {
         if (!$this->has($id)) {
             throw new NotFoundException(
-                'Type is not found: '.$id.'!'
+                'Type is not exists: '.$id.'!'
             );
         }
 
