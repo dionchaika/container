@@ -18,15 +18,25 @@ trait ResolverTrait
 {
     /**
      * @param \Psr\Container\ContainerInterface $container
+     * @param string                            $property
+     * @return mixed
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    public function resolveProperty(ContainerInterface $container, string $property)
+    {
+        return $container->get($property);
+    }
+
+    /**
+     * @param \Psr\Container\ContainerInterface $container
      * @param \ReflectionParameter              $parameter
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function resolveParameter(
-        ContainerInterface $container,
-        ReflectionParameter $parameter
-    ) {
+    public function resolveParameter(ContainerInterface $container, ReflectionParameter $parameter)
+    {
         $class = $parameter->getClass();
         if (null === $class) {
             if ($parameter->isDefaultValueAvailable()) {
@@ -39,17 +49,5 @@ trait ResolverTrait
         }
 
         return $container->get($class->name);
-    }
-
-    /**
-     * @param \Psr\Container\ContainerInterface $container
-     * @param string                            $property
-     * @return mixed
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    public function resolveProperty(ContainerInterface $container, string $property)
-    {
-        return $container->get($property);
     }
 }
