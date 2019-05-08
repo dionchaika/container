@@ -36,17 +36,19 @@ trait ResolverTrait
     ) {
         $class = $parameter->getClass();
         if (null === $class) {
+            if (null !== $boundParameters) {
+                if ($boundParameters->has($parameter->name)) {
+                    return $boundParameters
+                        ->get($parameter->name)
+                        ->getValue($container);
+                }
+            }
+
             if ($parameter->isDefaultValueAvailable()) {
                 try {
                     return $parameter->getDefaultValue();
                 } catch (ReflectionException $e) {
                     throw new ContainerException($e->getMessage());
-                }
-            }
-
-            if (null !== $boundParameters) {
-                if ($boundParameters->has($parameter->name)) {
-                    return $boundParameters->get($parameter->name)->getValue($container);
                 }
             }
 
