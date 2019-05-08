@@ -12,6 +12,7 @@
 namespace Dionchaika\Container;
 
 use Closure;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Dionchaika\Container\Interfaces\FactoryInterface;
 use Dionchaika\Container\Interfaces\ResolverInterface;
@@ -43,13 +44,17 @@ class Container implements ContainerInterface
 
     /**
      * @param mixed[] $config
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $config = [])
     {
-        if (
-            isset($config['resolver']) &&
-            $config['resolver'] instanceof ResolverInterface
-        ) {
+        if (isset($config['resolver'])) {
+            if (!($config['resolver'] instanceof ResolverInterface)) {
+                throw new InvalidArgumentException(
+                    'Resolver must be an instance of "\\Dionchaika\\Container\\Interfaces\\ResolverInterface"!'
+                );
+            }
+
             $this->resolver = $config['resolver'];
         } else {
             $this->resolver = new ConstructorResolver;
