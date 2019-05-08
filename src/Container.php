@@ -65,6 +65,7 @@ class Container implements ContainerInterface
      */
     public function __construct(?ResolverInterface $resolver = null)
     {
+        $this->factories = new FactoryCollection;
         $this->resolver = $resolver ?? new ConstructorResolver;
     }
 

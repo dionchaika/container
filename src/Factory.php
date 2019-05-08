@@ -56,6 +56,8 @@ class Factory implements FactoryInterface
         $this->name = $name;
         $this->closure = $closure;
         $this->singleton = $singleton;
+
+        $this->parameters = new ParameterCollection;
     }
 
     /**
