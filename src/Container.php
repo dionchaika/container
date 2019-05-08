@@ -118,8 +118,6 @@ class Container implements ContainerInterface
             $type = is_string($type)
                 ? $this->getClosureForType($type)
                 : $this->getClosureForInstance($type);
-
-            $singleton = is_string($type) ? $singleton : true;
         }
 
         $this->factories->set($id, new Factory($id, $type, $singleton));
