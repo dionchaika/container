@@ -53,6 +53,18 @@ class Container implements ContainerInterface
      *              \Dionchaika\Container\Interfaces\FactoryInterface[],
      *              default: empty
      *          ) - the array of default instance factories.
+     *          <code>
+     *              $container = new Container([
+     *
+     *                  'factories' => [
+     *
+     *                      new Factory('pdo', 'PDO'),
+     *                      new Factory('logger', 'LoggerInterface')
+     *
+     *                  ]
+     *
+     *              ]);
+     *          </code>
      *
      * @param mixed[] $config
      * @throws \InvalidArgumentException
