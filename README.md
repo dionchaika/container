@@ -61,7 +61,7 @@ $container->bind('SomeClass', function () {
 
 //
 // You can pass a container instance
-// as a second parameter of closure:
+// as a second parameter of the closure:
 //
 $container->bind(AnotherClass::class, function ($container) {
     return new AnotherClass($container->get('SomeClass'));
