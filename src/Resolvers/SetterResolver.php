@@ -19,8 +19,6 @@ use Dionchaika\Container\ContainerException;
 
 class SetterResolver extends ConstructorResolver implements ResolverInterface
 {
-    use ResolverTrait;
-
     /**
      * Resolve an instance of the type.
      *
