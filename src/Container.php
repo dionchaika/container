@@ -143,11 +143,7 @@ class Container implements ContainerInterface
     protected function getClosureForType(string $type): Closure
     {
         return function ($container, $parameters) use ($type) {
-            return $container->getResolver()->resolve(
-                $container,
-                $type,
-                $parameters
-            );
+            return $container->getResolver()->resolve($container, $type, $parameters);
         };
     }
 
