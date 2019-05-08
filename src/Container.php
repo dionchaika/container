@@ -12,6 +12,7 @@
 namespace Dionchaika\Container;
 
 use Psr\Container\ContainerInterface;
+use Dionchaika\Container\Resolvers\ConstructorResolver;
 
 /**
  * <code>
@@ -36,5 +37,39 @@ use Psr\Container\ContainerInterface;
  */
 class Container implements ContainerInterface
 {
-    
+    /**
+     * The container resolver.
+     *
+     * @var \Dionchaika\Container\ResolverInterface
+     */
+    protected $resolver;
+
+    /**
+     * The array
+     * of container factories.
+     *
+     * @var \Dionchaika\Container\FactoryInterface[]
+     */
+    protected $factories = [];
+
+    /**
+     * @param \Dionchaika\Container\ResolverInterface|null $resolver
+     */
+    public function __construct(?ResolverInterface $resolver = null)
+    {
+        $this->resolver = $resolver ?? new ConstructorResolver;
+    }
+
+    /**
+     * Bind a new type.
+     *
+     * @param string                     $id
+     * @param \Closure|string|mixed|null $type
+     * @param bool                       $singleton
+     * @return \Dionchaika\Container\Factory
+     */
+    public function bind($id, $type = null, bool $singleton = false): Factory
+    {
+        
+    }
 }
