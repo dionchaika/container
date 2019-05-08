@@ -76,7 +76,7 @@ $container = new Container;
 $container->bind('SomeClass', 'SomeInterface');
 
 //
-// Or use an alias name of the interface:
+// or use an alias name of the interface:
 //
 $container->bind('logger', '\Psr\Log\LoggerInterface');
 
