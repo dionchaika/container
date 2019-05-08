@@ -18,11 +18,12 @@ interface ResolverInterface
     /**
      * Resolve an instance of the type.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     * @param string                            $type
+     * @param \Psr\Container\ContainerInterface          $container
+     * @param string                                     $type
+     * @param \Dionchaika\Container\ParameterInterface[] $boundParameters
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function resolve(ContainerInterface $container, string $type);
+    public function resolve(ContainerInterface $container, string $type, array $boundParameters = []);
 }

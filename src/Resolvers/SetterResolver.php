@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
 use Dionchaika\Container\ResolverInterface;
 use Dionchaika\Container\ContainerException;
 
-class ConstructorResolver implements ResolverInterface
+class SetterResolver extends ConstructorResolver implements ResolverInterface
 {
     use ResolverTrait;
 
@@ -33,25 +33,12 @@ class ConstructorResolver implements ResolverInterface
      */
     public function resolve(ContainerInterface $container, string $type, array $boundParameters = [])
     {
+        $instance = parent::resolve($container, $type, $boundParameters);
+
         try {
-            $class = new ReflectionClass($type);
+            $class = new ReflectionClass($instance);
         } catch (ReflectionException $e) {
             throw new ContainerException($e->getMessage());
-        }
-
-        if (!$class->isInstantiable()) {
-            throw new ContainerException(
-                'Type is not instantiable: '.$type.'!'
-            );
-        }
-
-        $constructor = $class->getConstructor();
-        if (null === $constructor) {
-            try {
-                return $class->newInstanceWithoutConstructor();
-            } catch (ReflectionException $e) {
-                throw new ContainerException($e->getMessage());
-            }
         }
 
         $callback = function ($parameter) use ($container, $boundParameters) {
@@ -62,12 +49,18 @@ class ConstructorResolver implements ResolverInterface
             );
         };
 
-        $parameters = array_map($callback, $constructor->getParameters());
+        foreach ($class->getMethods() as $method) {
+            if (0 === strpos($method->name, 'set')) {
+                $parameters = array_map($callback, $method->getParameters());
 
-        try {
-            return $class->newInstanceArgs($parameters);
-        } catch (ReflectionException $e) {
-            throw new ContainerException($e->getMessage());
+                try {
+                    $method->invokeArgs($instance, $parameters);
+                } catch (ReflectionException $e) {
+                    throw new ContainerException($e->getMessage());
+                }
+            }
         }
+
+        return $instance;
     }
 }
