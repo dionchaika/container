@@ -43,6 +43,17 @@ class Container implements ContainerInterface
     protected $instances = [];
 
     /**
+     * Allowed container config options:
+     *
+     *      1.  resolver (
+     *              \Dionchaika\Container\Interfaces\ResolverInterface,
+     *              default: \Dionchaika\Container\Resolvers\ConstructorResolver
+     *          ) - the default instance resolver.
+     *      2.  factories (
+     *              \Dionchaika\Container\Interfaces\FactoryInterface[],
+     *              default: empty
+     *          ) - the array of default instance factories.
+     *
      * @param mixed[] $config
      * @throws \InvalidArgumentException
      */
