@@ -89,7 +89,8 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the array resolved instances.
+     * Get the array
+     * of resolved instances.
      *
      * @return mixed[]
      */
