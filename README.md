@@ -128,15 +128,13 @@ $container->bind('some_class', function ($container, $parameters) {
 
 class SomeClass
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     protected $logger;
-
-    /**
-     * @var \Psr\Http\Message\RequestInterface
-     */
     protected $request;
+
+    public function __construct()
+    {
+        //
+    }
 
     /**
      * @param \Psr\Log\LoggerInterface
@@ -171,6 +169,10 @@ $instance = $container->get('SomeClass');
 
 class SomeClass
 {
+    //
+    // Just define a property type in DocBlock:
+    //
+
     /**
      * @var \Psr\Log\LoggerInterface
      */
@@ -180,6 +182,11 @@ class SomeClass
      * @var \Psr\Http\Message\RequestInterface
      */
     protected $request;
+
+    public function __construct()
+    {
+        //
+    }
 }
 
 //
