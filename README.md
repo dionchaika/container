@@ -16,7 +16,6 @@ require_once 'vendor/autoload.php';
 ```
 
 ## Basic usage
-
 1. Simple binding:
 ```php
 
@@ -94,11 +93,11 @@ $logger = $container->get('logger');
 class SomeClass
 {
     /**
-     * @param \AnotherClass $anotherClass
-     * @param int           $id
-     * @param string        $name
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param int                      $id
+     * @param string                   $name
      */
-    public function __construct(AnotherClass $anotherClass, int $id, string $name)
+    public function __construct(LoggerInterface $logger, int $id, string $name)
     {
         //
     }
@@ -116,9 +115,77 @@ $container->bind('some_class', 'SomeClass')
 //
 $container->bind('some_class', function ($container, $parameters) {
     return new SomeClass(
-        $container->get('AnotherClass'),
+        $container->get('logger'),
         $parameters->get('id')->getValue(),
         $parameters->get('name')->getValue()
     );
 })->bindParameter('id', 10)->bindParameter('name', 'Max');
+```
+
+5. Setter injection:
+```php
+<?php
+
+class SomeClass
+{
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var \Psr\Http\Message\RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @param \Psr\Log\LoggerInterface
+     * @return void
+     */
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * @param \Psr\Http\Message\RequestInterface
+     * @return void
+     */
+    public function setRequest(RequestInterface $request): void
+    {
+        $this->request = $request;
+    }
+}
+
+//
+// Configure the container to setter injection:
+//
+$container = new Container(['resolver' => new SetterResolver]);
+
+$instance = $container->get('SomeClass');
+```
+
+5. Property injection:
+```php
+<?php
+
+class SomeClass
+{
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var \Psr\Http\Message\RequestInterface
+     */
+    protected $request;
+}
+
+//
+// Configure the container to property injection:
+//
+$container = new Container(['resolver' => new PropertyResolver]);
+
+$instance = $container->get('SomeClass');
 ```
