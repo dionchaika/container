@@ -49,7 +49,10 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
 
                 if ($container->has($matches[1])) {
                     $property->setValue($instance, $container->get($matches[1]));
-                } else if ($boundParameters->has($property->name)) {
+                } else if (
+                    null !== $boundParameters &&
+                    $boundParameters->has($property->name)
+                ) {
                     $property->setValue($instance, $boundParameters
                         ->get($property->name)
                         ->getValue($container)
