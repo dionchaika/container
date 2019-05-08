@@ -14,3 +14,21 @@ composer require dionchaika/container:dev-master
 
 require_once 'vendor/autoload.php';
 ```
+
+## Basic usage
+```php
+<?php
+
+$container = new Container;
+
+$container
+    ->bind('db', 'PDO')
+    ->asSingleton()
+    ->bindParameter('dsn', 'mysql:host=localhost')
+    ->bindParameter('username', 'root')
+    ->bindParameter('passwd', '');
+
+if ($container->has('db')) {
+    $db = $container->get('db');
+}
+```
