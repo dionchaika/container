@@ -99,9 +99,9 @@ class Factory implements FactoryInterface
      *
      * @param string         $name
      * @param \Closure|mixed $value
-     * @return self
+     * @return \Dionchaika\Container\Interfaces\FactoryInterface
      */
-    public function bindParameter(string $name, $value): self
+    public function bindParameter(string $name, $value): FactoryInterface
     {
         $this->parameters->set(new Parameter($name, $value));
         return $this;

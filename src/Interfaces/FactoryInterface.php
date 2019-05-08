@@ -35,9 +35,9 @@ interface FactoryInterface
      *
      * @param string         $name
      * @param \Closure|mixed $value
-     * @return self
+     * @return \Dionchaika\Container\Interfaces\FactoryInterface
      */
-    public function bindParameter(string $name, $value): self;
+    public function bindParameter(string $name, $value): FactoryInterface;
 
     /**
      * Get the instance.
