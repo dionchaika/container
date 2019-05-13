@@ -122,7 +122,7 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Get the instance.
+     * Get instance.
      *
      * @param \Psr\Container\ContainerInterface $container
      * @return mixed
