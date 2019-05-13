@@ -145,8 +145,6 @@ class Container implements ContainerInterface
     /**
      * Bind a new singleton type to the container.
      *
-     * An alias method name to bind.
-     *
      * @param string                     $id
      * @param \Closure|string|mixed|null $type
      * @param mixed[]                    $parameters
