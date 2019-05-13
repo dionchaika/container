@@ -266,11 +266,16 @@ class Container implements ContainerInterface
             throw new ContainerException($e->getMessage());
         }
 
-        $callback = function ($parameter) use ($parameters) {
+        $params = [];
+        foreach ($parameters as $name => $value) {
+            $params[] = new Parameter($name, $value);
+        }
+
+        $callback = function ($parameter) use ($params) {
             $this->resolveParameter(
                 $this,
                 $parameter,
-                new ParameterCollection($parameters)
+                !empty($params) ? new ParameterCollection($params) : null
             );
         };
 
