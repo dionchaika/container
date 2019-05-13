@@ -47,9 +47,7 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
             if (preg_match('/\@var +([\w\\\]+)/', $property->getDocComment(), $matches)) {
                 $property->setAccessible(true);
 
-                if ($container->has($matches[1])) {
-                    $property->setValue($instance, $container->get($matches[1]));
-                } else if (
+                if (
                     null !== $parameters &&
                     $parameters->has($property->name)
                 ) {
@@ -59,9 +57,7 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
                             ->getValue($container)
                     );
                 } else {
-                    throw new ContainerException(
-                        'Property is not bound: '.$property->name.'!'
-                    );
+                    $property->setValue($instance, $container->make($matches[1]));
                 }
             }
         }

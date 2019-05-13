@@ -57,6 +57,6 @@ trait ResolverTrait
             );
         }
 
-        return $container->get($class->name);
+        return $container->make($class->name);
     }
 }
