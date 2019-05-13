@@ -74,6 +74,26 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Get the factory collection.
+     *
+     * @return \Dionchaika\Container\FactoryCollection
+     */
+    public function getFactories(): FactoryCollection
+    {
+        return $this->factories;
+    }
+
+    /**
+     * Get the array of resolved instances.
+     *
+     * @return mixed[]
+     */
+    public function getInstances(): array
+    {
+        return $this->instances;
+    }
+
+    /**
      * Bind a new type to the container.
      *
      * @param string                     $id
