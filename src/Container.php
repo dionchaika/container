@@ -111,7 +111,7 @@ class Container implements ContainerInterface
             $singleton = is_string($type) ? $singleton : true;
         }
 
-        return $this->factories->set(new Factory($id, $type, $singleton));
+        return $this->factories->add(new Factory($id, $type, $singleton));
     }
 
     /**
