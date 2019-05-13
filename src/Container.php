@@ -142,11 +142,16 @@ class Container implements ContainerInterface
             $singleton = is_string($type) ? $singleton : true;
         }
 
+        $params = [];
+        foreach ($parameters as $name => $value) {
+            $params[] = new Parameter($name, $value);
+        }
+
         return $this->factories->add(new Factory(
             $id,
             $type,
             $singleton,
-            !empty($parameters) ? new ParameterCollection($parameters) : null
+            !empty($params) ? new ParameterCollection($params) : null
         ));
     }
 
