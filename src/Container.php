@@ -121,7 +121,7 @@ class Container implements ContainerInterface
      *
      * @param string                     $id
      * @param \Closure|string|mixed|null $type
-     * @return \Dionchaika\Container\Interfaces\FactoryInterface
+     * @return \Dionchaika\Container\FactoryInterface
      */
     public function singleton(string $id, $type = null): FactoryInterface
     {
