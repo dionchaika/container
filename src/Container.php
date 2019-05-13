@@ -24,6 +24,13 @@ class Container implements ContainerInterface
     use ResolverTrait;
 
     /**
+     * Enable autoresolving.
+     *
+     * @var bool
+     */
+    public $enableAutoresolving = true;
+
+    /**
      * The container default resolver.
      *
      * @var \Dionchaika\Container\ResolverInterface
@@ -45,13 +52,6 @@ class Container implements ContainerInterface
     protected $instances = [];
 
     /**
-     * Is autoresolve enabled.
-     *
-     * @var bool
-     */
-    protected $autoResolveEnabled = true;
-
-    /**
      * @param mixed[] $config
      * @throws \InvalidArgumentException
      */
@@ -70,8 +70,8 @@ class Container implements ContainerInterface
             $this->resolver = new ConstructorResolver;
         }
 
-        if (isset($config['autoresolve'])) {
-            $this->autoResolveEnabled = $config['autoresolve'];
+        if (isset($config['autoresolving'])) {
+            $this->enableAutoresolving = $config['autoresolving'];
         }
 
         $this->factories = new FactoryCollection(
@@ -107,16 +107,6 @@ class Container implements ContainerInterface
     public function getInstances(): array
     {
         return $this->instances;
-    }
-
-    /**
-     * Check is autoresolve enabled.
-     *
-     * @return bool
-     */
-    public function isAutoresolveEnabled(): bool
-    {
-        return $this->autoResolveEnabled;
     }
 
     /**

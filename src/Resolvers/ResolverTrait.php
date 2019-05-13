@@ -57,8 +57,6 @@ trait ResolverTrait
             );
         }
 
-        return $container->isAutoresolveEnabled()
-            ? $container->make($class->name)
-            : $container->get($class->name);
+        return $container->enableAutoresolving ? $container->make($class->name) : $container->get($class->name);
     }
 }

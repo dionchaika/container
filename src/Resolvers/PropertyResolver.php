@@ -59,7 +59,7 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
                 } else {
                     $property->setValue(
                         $instance,
-                        $container->isAutoresoveEnabled() ? $container->make($matches[1]) : $container->get($matches[1])
+                        $container->enableAutoresolving ? $container->make($matches[1]) : $container->get($matches[1])
                     );
                 }
             }
