@@ -240,13 +240,15 @@ class Container implements ContainerInterface
             throw new ContainerException($e->getMessage());
         }
 
-        $methodParameters = array_map(function ($parameter) use ($parameters) {
+        $callback = function ($parameter) use ($parameters) {
             $this->resolveParameter(
                 $this,
                 $parameter,
                 new ParameterCollection($parameters)
             );
-        }, $method->getParameters());
+        };
+
+        $methodParameters = array_map($callback, $method->getParameters());
 
         try {
             return $method->invokeArgs($type, $methodParameters);
