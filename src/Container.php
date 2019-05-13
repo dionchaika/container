@@ -33,8 +33,7 @@ class Container implements ContainerInterface
     protected $factories;
 
     /**
-     * The array
-     * of resolved instances.
+     * The array of resolved instances.
      *
      * @var mixed[]
      */
