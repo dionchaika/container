@@ -159,14 +159,14 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Resolve the instance of the type.
+     * Make the instance of the type.
      *
      * @param string  $id
      * @param mixed[] $params
      * @return mixed
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function resolve(string $id, array $params = [])
+    public function make(string $id, array $params = [])
     {
         if (!$this->has($id)) {
             $this->bind($id);
@@ -213,7 +213,7 @@ class Container implements ContainerInterface
             );
         }
 
-        return $this->resolve($id);
+        return $this->make($id);
     }
 
     /**
@@ -228,7 +228,7 @@ class Container implements ContainerInterface
     public function call($type, $method, array $params = [])
     {
         if (is_string($type)) {
-            $type = $this->resolve($type);
+            $type = $this->make($type);
         }
 
         try {
