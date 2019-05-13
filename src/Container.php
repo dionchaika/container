@@ -21,14 +21,14 @@ use Dionchaika\Container\Resolvers\ConstructorResolver;
 class Container implements ContainerInterface
 {
     /**
-     * The instance resolver.
+     * The default resolver.
      *
-     * @var \Dionchaika\Container\Interfaces\ResolverInterface
+     * @var \Dionchaika\Container\ResolverInterface
      */
     protected $resolver;
 
     /**
-     * The instance factories.
+     * The factory collection.
      *
      * @var \Dionchaika\Container\FactoryCollection
      */
@@ -46,13 +46,13 @@ class Container implements ContainerInterface
      * Allowed container config options:
      *
      *      1.  resolver (
-     *              \Dionchaika\Container\Interfaces\ResolverInterface,
+     *              \Dionchaika\Container\ResolverInterface,
      *              default: \Dionchaika\Container\Resolvers\ConstructorResolver
-     *          ) - the default instance resolver.
+     *          ) - the default resolver.
      *      2.  factories (
-     *              \Dionchaika\Container\Interfaces\FactoryInterface[],
+     *              \Dionchaika\Container\FactoryInterface[],
      *              default: empty
-     *          ) - the array of default instance factories.
+     *          ) - the array of default factories.
      *          <code>
      *              $container = new Container([
      *
@@ -74,7 +74,8 @@ class Container implements ContainerInterface
         if (isset($config['resolver'])) {
             if (!($config['resolver'] instanceof ResolverInterface)) {
                 throw new InvalidArgumentException(
-                    'Resolver must be an instance of "\\Dionchaika\\Container\\Interfaces\\ResolverInterface"!'
+                    'Resolver must be an instance of '
+                    .'"\\Dionchaika\\Container\\Interfaces\\ResolverInterface"!'
                 );
             }
 
@@ -89,9 +90,9 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the instance resolver.
+     * Get the default resolver.
      *
-     * @return \Dionchaika\Container\Interfaces\ResolverInterface
+     * @return \Dionchaika\Container\ResolverInterface
      */
     public function getResolver(): ResolverInterface
     {
@@ -104,21 +105,16 @@ class Container implements ContainerInterface
      * @param string                     $id
      * @param \Closure|string|mixed|null $type
      * @param bool                       $singleton
-     * @return \Dionchaika\Container\Interfaces\FactoryInterface
+     * @return \Dionchaika\Container\FactoryInterface
      */
     public function bind(string $id, $type = null, bool $singleton = false): FactoryInterface
     {
         unset($this->instances[$id]);
 
         $type = $type ?? $id;
-
         if (!($type instanceof Closure)) {
-            if (is_string($type)) {
-                $type = $this->getClosureForType($type);
-            } else {
-                $type = $this->getClosureForInstance($type);
-                $singleton = true;
-            }
+            $type = $this->getClosure($type);
+            $singleton = is_string($type) ? $singleton : true;
         }
 
         return $this->factories->set(new Factory($id, $type, $singleton));
@@ -163,10 +159,16 @@ class Container implements ContainerInterface
         if (!$this->has($id)) {
             $this->bind($id);
 
-            foreach ($parameters as $name => $value) {
-                $this->factories
-                    ->get($id)
-                    ->bindParameter($name, $value);
+            foreach ($parameters as $key => $value) {
+                if (is_int($key)) {
+                    $this->factories
+                        ->get($id)
+                        ->bindParameter($value);
+                } else {
+                    $this->factories
+                        ->get($id)
+                        ->bindNamedParameter($key, $value);
+                }
             }
         }
 
@@ -211,26 +213,17 @@ class Container implements ContainerInterface
     /**
      * Get the closure for the type.
      *
-     * @param string $type
+     * @param string|mixed $type
      * @return \Closure
      */
-    protected function getClosureForType($type): Closure
+    protected function getClosure($type): Closure
     {
-        return function ($container, $parameters) use ($type) {
-            return $container
-                ->getResolver()
-                ->resolve($container, $type, $parameters);
-        };
-    }
-
-    /**
-     * Get the closure for the instance.
-     *
-     * @param mixed $instance
-     * @return \Closure
-     */
-    protected function getClosureForInstance($instance): Closure
-    {
-        return function () use ($instance) { return $instance; };
+        return is_string($type)
+            ? function ($container, $params) use ($type) {
+                return $container
+                    ->getResolver()
+                    ->resolve($container, $type, $params);
+            }
+            : function () use ($type) { return $type; };
     }
 }
