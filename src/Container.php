@@ -49,7 +49,7 @@ class Container implements ContainerInterface
             if (!($config['resolver'] instanceof ResolverInterface)) {
                 throw new InvalidArgumentException(
                     'Resolver must be an instance of '
-                    .'"\\Dionchaika\\Container\\Interfaces\\ResolverInterface"!'
+                    .'"\\Dionchaika\\Container\\ResolverInterface"!'
                 );
             }
 
