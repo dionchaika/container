@@ -130,7 +130,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Set an instance to the container.
+     * Set a new instance to the container.
      *
      * @param string $id
      * @param mixed  $instance
