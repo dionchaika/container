@@ -115,6 +115,19 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Set an instance to the container.
+     *
+     * @param string $id
+     * @param mixed  $instance
+     * @return void
+     */
+    public function instance(string $id, $instance): void
+    {
+        $this->factories->delete($id);
+        $this->instances[$id] = $instance;
+    }
+
+    /**
      * Bind a new singleton type to the container.
      *
      * An alias method name to bind.
