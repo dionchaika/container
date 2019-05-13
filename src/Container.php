@@ -271,11 +271,13 @@ class Container implements ContainerInterface
             $params[] = new Parameter($name, $value);
         }
 
+        $params = !empty($params) ? new ParameterCollection($params) : null;
+
         $callback = function ($parameter) use ($params) {
-            $this->resolveParameter(
+            return $this->resolveParameter(
                 $this,
                 $parameter,
-                !empty($params) ? new ParameterCollection($params) : null
+                $params
             );
         };
 
