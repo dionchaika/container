@@ -9,7 +9,7 @@
  * @author Dion Chaika <dionchaika@gmail.com>
  */
 
-namespace Dionchaika\Container\Interfaces;
+namespace Dionchaika\Container;
 
 use Psr\Container\ContainerInterface;
 

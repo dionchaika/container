@@ -171,16 +171,10 @@ class Container implements ContainerInterface
         if (!$this->has($id)) {
             $this->bind($id);
 
-            foreach ($params as $key => $value) {
-                if (is_int($key)) {
-                    $this->factories
-                        ->get($id)
-                        ->bindParameter($value);
-                } else {
-                    $this->factories
-                        ->get($id)
-                        ->bindNamedParameter($key, $value);
-                }
+            foreach ($params as $name => $value) {
+                $this->factories
+                    ->get($id)
+                    ->bindParameter($name, $value);
             }
         }
 

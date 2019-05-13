@@ -12,20 +12,19 @@
 namespace Dionchaika\Container;
 
 use InvalidArgumentException;
-use Dionchaika\Container\Interfaces\FactoryInterface;
+use Dionchaika\Container\FactoryInterface;
 
 class FactoryCollection
 {
     /**
-     * The array
-     * of instance factories.
+     * The array of factories.
      *
      * @var mixed[]
      */
     protected $factories = [];
 
     /**
-     * @param \Dionchaika\Container\Interfaces\FactoryInterface[] $factories
+     * @param \Dionchaika\Container\FactoryInterface[] $factories
      * @throws \InvalidArgumentException
      */
     public function __construct(array $factories = [])
@@ -35,27 +34,28 @@ class FactoryCollection
                 $this->factories[$factory->getName()] = $factory;
             } else {
                 throw new InvalidArgumentException(
-                    'Factory must be an instance of "\\Dionchaika\\Container\\Interfaces\\FactoryInterface"!'
+                    'Factory must be an instance of '
+                    .'\\Dionchaika\\Container\\FactoryInterface!'
                 );
             }
         }
     }
 
     /**
-     * Set a new instance
-     * factory to the collection.
+     * Add a new factory
+     * to the collection.
      *
-     * @param \Dionchaika\Container\Interfaces\FactoryInterface $factory
-     * @return \Dionchaika\Container\Interfaces\FactoryInterface
+     * @param \Dionchaika\Container\FactoryInterface $factory
+     * @return \Dionchaika\Container\FactoryInterface
      */
-    public function set(FactoryInterface $factory): FactoryInterface
+    public function add(FactoryInterface $factory): FactoryInterface
     {
         return $this->factories[$factory->getName()] = $factory;
     }
 
     /**
-     * Check is the instance
-     * factory exists in the collection.
+     * Check is the factory
+     * exists in the collection.
      *
      * @param string $name
      * @return bool
@@ -66,13 +66,37 @@ class FactoryCollection
     }
 
     /**
-     * Get the instance factory.
+     * Get the factory.
      *
      * @param string $name
-     * @return \Dionchaika\Container\Interfaces\FactoryInterface|null
+     * @return \Dionchaika\Container\FactoryInterface|null
      */
     public function get(string $name): ?FactoryInterface
     {
         return $this->has($name) ? $this->factories[$name] : null;
+    }
+
+    /**
+     * Get all factories
+     * of the collection.
+     *
+     * @return mixed[]
+     */
+    public function all(): array
+    {
+        return $this->factories;
+    }
+
+    /**
+     * Delete a factory
+     * from the collection.
+     *
+     * @param string $name
+     * @return self
+     */
+    public function delete(string $name): self
+    {
+        unset($this->factories[$name]);
+        return $this;
     }
 }

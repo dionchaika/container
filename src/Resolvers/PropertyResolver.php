@@ -14,9 +14,9 @@ namespace Dionchaika\Container\Resolvers;
 use ReflectionClass;
 use ReflectionException;
 use Psr\Container\ContainerInterface;
+use Dionchaika\Container\ResolverInterface;
 use Dionchaika\Container\ContainerException;
 use Dionchaika\Container\ParameterCollection;
-use Dionchaika\Container\Interfaces\ResolverInterface;
 
 class PropertyResolver extends ConstructorResolver implements ResolverInterface
 {

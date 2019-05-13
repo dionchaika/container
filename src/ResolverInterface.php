@@ -9,7 +9,7 @@
  * @author Dion Chaika <dionchaika@gmail.com>
  */
 
-namespace Dionchaika\Container\Interfaces;
+namespace Dionchaika\Container;
 
 use Psr\Container\ContainerInterface;
 use Dionchaika\Container\ParameterCollection;
@@ -21,7 +21,7 @@ interface ResolverInterface
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param string                                         $type
-     * @param \Dionchaika\Container\ParameterCollection|null $boundParameters
+     * @param \Dionchaika\Container\ParameterCollection|null $params
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -29,6 +29,6 @@ interface ResolverInterface
     public function resolve(
         ContainerInterface $container,
         string $type,
-        ?ParameterCollection $boundParameters = null
+        ?ParameterCollection $params = null
     );
 }

@@ -13,7 +13,7 @@ namespace Dionchaika\Container;
 
 use Closure;
 use Psr\Container\ContainerInterface;
-use Dionchaika\Container\Interfaces\FactoryInterface;
+use Dionchaika\Container\FactoryInterface;
 
 class Factory implements FactoryInterface
 {
@@ -99,7 +99,7 @@ class Factory implements FactoryInterface
      *
      * @param string         $name
      * @param \Closure|mixed $value
-     * @return \Dionchaika\Container\Interfaces\FactoryInterface
+     * @return \Dionchaika\Container\FactoryInterface
      */
     public function bindParameter(string $name, $value): FactoryInterface
     {

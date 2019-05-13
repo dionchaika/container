@@ -9,7 +9,7 @@
  * @author Dion Chaika <dionchaika@gmail.com>
  */
 
-namespace Dionchaika\Container\Interfaces;
+namespace Dionchaika\Container;
 
 use Psr\Container\ContainerInterface;
 
@@ -31,11 +31,11 @@ interface FactoryInterface
     public function isSingleton(): bool;
 
     /**
-     * Bind a parameter.
+     * Bind parameter.
      *
      * @param string         $name
      * @param \Closure|mixed $value
-     * @return \Dionchaika\Container\Interfaces\FactoryInterface
+     * @return \Dionchaika\Container\FactoryInterface
      */
     public function bindParameter(string $name, $value): FactoryInterface;
 
