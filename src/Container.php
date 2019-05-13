@@ -228,7 +228,7 @@ class Container implements ContainerInterface
      * @return mixed
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function call($type, $method, array $parameters = [])
+    public function call($type, string $method, array $parameters = [])
     {
         if (is_string($type)) {
             $type = $this->make($type);
