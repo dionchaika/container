@@ -12,7 +12,6 @@
 namespace Dionchaika\Container;
 
 use InvalidArgumentException;
-use Dionchaika\Container\ParameterInterface;
 
 class ParameterCollection
 {
@@ -31,7 +30,7 @@ class ParameterCollection
     {
         foreach ($parameters as $parameter) {
             if ($parameter instanceof ParameterInterface) {
-                $this->parameters[$parameter->getName()] = $parameter;
+                $this->add($parameter);
             } else {
                 throw new InvalidArgumentException(
                     'Parameter must be an instance of '
@@ -53,6 +52,16 @@ class ParameterCollection
     }
 
     /**
+     * Get all parameters of the collection.
+     *
+     * @return mixed[]
+     */
+    public function all(): array
+    {
+        return $this->parameters;
+    }
+
+    /**
      * Check is the parameter
      * exists in the collection.
      *
@@ -65,7 +74,7 @@ class ParameterCollection
     }
 
     /**
-     * Get the parameter.
+     * Get parameter.
      *
      * @param string $name
      * @return \Dionchaika\Container\ParameterInterface|null
@@ -73,16 +82,6 @@ class ParameterCollection
     public function get(string $name): ?ParameterInterface
     {
         return $this->has($name) ? $this->parameters[$name] : null;
-    }
-
-    /**
-     * Get all parameters of the collection.
-     *
-     * @return mixed[]
-     */
-    public function all(): array
-    {
-        return $this->parameters;
     }
 
     /**

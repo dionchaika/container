@@ -25,7 +25,7 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param string                                         $type
-     * @param \Dionchaika\Container\ParameterCollection|null $boundParameters
+     * @param \Dionchaika\Container\ParameterCollection|null $parameters
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -33,9 +33,9 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
     public function resolve(
         ContainerInterface $container,
         string $type,
-        ?ParameterCollection $boundParameters = null
+        ?ParameterCollection $parameters = null
     ) {
-        $instance = parent::resolve($container, $type, $boundParameters);
+        $instance = parent::resolve($container, $type, $parameters);
 
         try {
             $class = new ReflectionClass($instance);
@@ -50,12 +50,13 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
                 if ($container->has($matches[1])) {
                     $property->setValue($instance, $container->get($matches[1]));
                 } else if (
-                    null !== $boundParameters &&
-                    $boundParameters->has($property->name)
+                    null !== $parameters &&
+                    $parameters->has($property->name)
                 ) {
-                    $property->setValue($instance, $boundParameters
-                        ->get($property->name)
-                        ->getValue($container)
+                    $property->setValue($instance,
+                        $parameters
+                            ->get($property->name)
+                            ->getValue($container)
                     );
                 } else {
                     throw new ContainerException(

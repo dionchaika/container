@@ -13,7 +13,6 @@ namespace Dionchaika\Container;
 
 use Closure;
 use Psr\Container\ContainerInterface;
-use Dionchaika\Container\FactoryInterface;
 
 class Factory implements FactoryInterface
 {
@@ -32,7 +31,7 @@ class Factory implements FactoryInterface
     protected $closure;
 
     /**
-     * Is the resolved
+     * Is the resolving
      * instance should be
      * managed as a singleton.
      *
@@ -41,24 +40,29 @@ class Factory implements FactoryInterface
     protected $singleton = false;
 
     /**
-     * The factory parameters.
+     * The factory parameter collection.
      *
      * @var \Dionchaika\Container\ParameterCollection
      */
     protected $parameters;
 
     /**
-     * @param string   $name
-     * @param \Closure $closure
-     * @param bool     $singleton
+     * @param string                                         $name
+     * @param \Closure                                       $closure
+     * @param bool                                           $singleton
+     * @param \Dionchaika\Container\ParameterCollection|null $parameters
      */
-    public function __construct(string $name, Closure $closure, bool $singleton = false)
-    {
+    public function __construct(
+        string $name,
+        Closure $closure,
+        bool $singleton = false,
+        ?ParameterCollection $parameters = null
+    ) {
         $this->name = $name;
         $this->closure = $closure;
         $this->singleton = $singleton;
 
-        $this->parameters = new ParameterCollection;
+        $this->parameters = $parameters ?? new ParameterCollection;
     }
 
     /**
@@ -72,7 +76,7 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Manage the resolved
+     * Manage the resolving
      * instance as a singleton.
      *
      * @return self
@@ -84,7 +88,7 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Check is the resolved
+     * Check is the resolving
      * instance should be managed as a singleton.
      *
      * @return bool
@@ -95,7 +99,17 @@ class Factory implements FactoryInterface
     }
 
     /**
-     * Bind a parameter.
+     * Get the factory parameter collection.
+     *
+     * @return \Dionchaika\Container\ParameterCollection
+     */
+    public function getParameters(): ParameterCollection
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Bind parameter.
      *
      * @param string         $name
      * @param \Closure|mixed $value
@@ -103,7 +117,7 @@ class Factory implements FactoryInterface
      */
     public function bindParameter(string $name, $value): FactoryInterface
     {
-        $this->parameters->set(new Parameter($name, $value));
+        $this->parameters->add(new Parameter($name, $value));
         return $this;
     }
 

@@ -12,7 +12,6 @@
 namespace Dionchaika\Container;
 
 use Psr\Container\ContainerInterface;
-use Dionchaika\Container\ParameterCollection;
 
 interface ResolverInterface
 {
@@ -21,7 +20,7 @@ interface ResolverInterface
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param string                                         $type
-     * @param \Dionchaika\Container\ParameterCollection|null $params
+     * @param \Dionchaika\Container\ParameterCollection|null $parameters
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -29,6 +28,6 @@ interface ResolverInterface
     public function resolve(
         ContainerInterface $container,
         string $type,
-        ?ParameterCollection $params = null
+        ?ParameterCollection $parameters = null
     );
 }

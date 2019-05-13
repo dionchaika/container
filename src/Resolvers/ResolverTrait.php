@@ -20,11 +20,11 @@ use Dionchaika\Container\ParameterCollection;
 trait ResolverTrait
 {
     /**
-     * Resolve a parameter.
+     * Resolve parameter.
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param \ReflectionParameter                           $parameter
-     * @param \Dionchaika\Container\ParameterCollection|null $boundParameters
+     * @param \Dionchaika\Container\ParameterCollection|null $parameters
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -32,13 +32,13 @@ trait ResolverTrait
     public function resolveParameter(
         ContainerInterface $container,
         ReflectionParameter $parameter,
-        ?ParameterCollection $boundParameters = null
+        ?ParameterCollection $parameters = null
     ) {
         $class = $parameter->getClass();
         if (null === $class) {
-            if (null !== $boundParameters) {
-                if ($boundParameters->has($parameter->name)) {
-                    return $boundParameters
+            if (null !== $parameters) {
+                if ($parameters->has($parameter->name)) {
+                    return $parameters
                         ->get($parameter->name)
                         ->getValue($container);
                 }

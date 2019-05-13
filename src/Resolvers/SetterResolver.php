@@ -25,7 +25,7 @@ class SetterResolver extends ConstructorResolver implements ResolverInterface
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param string                                         $type
-     * @param \Dionchaika\Container\ParameterCollection|null $boundParameters
+     * @param \Dionchaika\Container\ParameterCollection|null $parameters
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -33,9 +33,9 @@ class SetterResolver extends ConstructorResolver implements ResolverInterface
     public function resolve(
         ContainerInterface $container,
         string $type,
-        ?ParameterCollection $boundParameters = null
+        ?ParameterCollection $parameters = null
     ) {
-        $instance = parent::resolve($container, $type, $boundParameters);
+        $instance = parent::resolve($container, $type, $parameters);
 
         try {
             $class = new ReflectionClass($instance);
@@ -43,16 +43,19 @@ class SetterResolver extends ConstructorResolver implements ResolverInterface
             throw new ContainerException($e->getMessage());
         }
 
-        $callback = function ($parameter) use ($container, $boundParameters) {
-            return $this->resolveParameter($container, $parameter, $boundParameters);
+        $callback = function ($parameter) use ($container, $parameters) {
+            return $this->resolveParameter($container, $parameter, $parameters);
         };
 
         foreach ($class->getMethods() as $method) {
             if (0 === strpos($method->name, 'set')) {
-                $parameters = array_map($callback, $method->getParameters());
+                $setterParameters = array_map(
+                    $callback,
+                    $method->getParameters()
+                );
 
                 try {
-                    $method->invokeArgs($instance, $parameters);
+                    $method->invokeArgs($instance, $setterParameters);
                 } catch (ReflectionException $e) {
                     throw new ContainerException($e->getMessage());
                 }

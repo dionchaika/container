@@ -27,7 +27,7 @@ class ConstructorResolver implements ResolverInterface
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param string                                         $type
-     * @param \Dionchaika\Container\ParameterCollection|null $boundParameters
+     * @param \Dionchaika\Container\ParameterCollection|null $parameters
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -35,7 +35,7 @@ class ConstructorResolver implements ResolverInterface
     public function resolve(
         ContainerInterface $container,
         string $type,
-        ?ParameterCollection $boundParameters = null
+        ?ParameterCollection $parameters = null
     ) {
         try {
             $class = new ReflectionClass($type);
@@ -58,14 +58,21 @@ class ConstructorResolver implements ResolverInterface
             }
         }
 
-        $callback = function ($parameter) use ($container, $boundParameters) {
-            return $this->resolveParameter($container, $parameter, $boundParameters);
+        $callback = function ($parameter) use ($container, $parameters) {
+            return $this->resolveParameter(
+                $container,
+                $parameter,
+                $parameters
+            );
         };
 
-        $parameters = array_map($callback, $constructor->getParameters());
+        $constructorParameters = array_map(
+            $callback,
+            $constructor->getParameters()
+        );
 
         try {
-            return $class->newInstanceArgs($parameters);
+            return $class->newInstanceArgs($constructorParameters);
         } catch (ReflectionException $e) {
             throw new ContainerException($e->getMessage());
         }

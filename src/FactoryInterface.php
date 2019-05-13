@@ -23,7 +23,7 @@ interface FactoryInterface
     public function getName(): string;
 
     /**
-     * Check is the resolved
+     * Check is the resolving
      * instance should be managed as a singleton.
      *
      * @return bool
@@ -40,7 +40,7 @@ interface FactoryInterface
     public function bindParameter(string $name, $value): FactoryInterface;
 
     /**
-     * Get the instance.
+     * Get instance.
      *
      * @param \Psr\Container\ContainerInterface $container
      * @return mixed

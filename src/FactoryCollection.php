@@ -12,7 +12,6 @@
 namespace Dionchaika\Container;
 
 use InvalidArgumentException;
-use Dionchaika\Container\FactoryInterface;
 
 class FactoryCollection
 {
@@ -31,7 +30,7 @@ class FactoryCollection
     {
         foreach ($factories as $factory) {
             if ($factory instanceof FactoryInterface) {
-                $this->factories[$factory->getName()] = $factory;
+                $this->add($factory);
             } else {
                 throw new InvalidArgumentException(
                     'Factory must be an instance of '
@@ -54,6 +53,17 @@ class FactoryCollection
     }
 
     /**
+     * Get all factories
+     * of the collection.
+     *
+     * @return mixed[]
+     */
+    public function all(): array
+    {
+        return $this->factories;
+    }
+
+    /**
      * Check is the factory
      * exists in the collection.
      *
@@ -66,7 +76,7 @@ class FactoryCollection
     }
 
     /**
-     * Get the factory.
+     * Get factory.
      *
      * @param string $name
      * @return \Dionchaika\Container\FactoryInterface|null
@@ -74,17 +84,6 @@ class FactoryCollection
     public function get(string $name): ?FactoryInterface
     {
         return $this->has($name) ? $this->factories[$name] : null;
-    }
-
-    /**
-     * Get all factories
-     * of the collection.
-     *
-     * @return mixed[]
-     */
-    public function all(): array
-    {
-        return $this->factories;
     }
 
     /**

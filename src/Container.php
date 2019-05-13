@@ -24,21 +24,21 @@ class Container implements ContainerInterface
     use ResolverTrait;
 
     /**
-     * The default resolver.
+     * The container default resolver.
      *
      * @var \Dionchaika\Container\ResolverInterface
      */
     protected $resolver;
 
     /**
-     * The factory collection.
+     * The container factory collection.
      *
      * @var \Dionchaika\Container\FactoryCollection
      */
     protected $factories;
 
     /**
-     * The array of resolved instances.
+     * The array of container resolved instances.
      *
      * @var mixed[]
      */
@@ -69,7 +69,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the default resolver.
+     * Get the container default resolver.
      *
      * @return \Dionchaika\Container\ResolverInterface
      */
@@ -79,7 +79,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the factory collection.
+     * Get the container factory collection.
      *
      * @return \Dionchaika\Container\FactoryCollection
      */
@@ -89,7 +89,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Get the array of resolved instances.
+     * Get the array of container resolved instances.
      *
      * @return mixed[]
      */
@@ -104,10 +104,15 @@ class Container implements ContainerInterface
      * @param string                     $id
      * @param \Closure|string|mixed|null $type
      * @param bool                       $singleton
+     * @param mixed[]                    $parameters
      * @return \Dionchaika\Container\FactoryInterface
      */
-    public function bind(string $id, $type = null, bool $singleton = false): FactoryInterface
-    {
+    public function bind(
+        string $id,
+        $type = null,
+        bool $singleton = false,
+        array $parameters = []
+    ): FactoryInterface {
         unset($this->instances[$id]);
 
         $type = $type ?? $id;
@@ -116,7 +121,12 @@ class Container implements ContainerInterface
             $singleton = is_string($type) ? $singleton : true;
         }
 
-        return $this->factories->add(new Factory($id, $type, $singleton));
+        return $this->factories->add(new Factory(
+            $id,
+            $type,
+            $singleton,
+            !empty($parameters) ? new ParameterCollection($parameters) : null
+        ));
     }
 
     /**
@@ -139,11 +149,12 @@ class Container implements ContainerInterface
      *
      * @param string                     $id
      * @param \Closure|string|mixed|null $type
+     * @param mixed[]                    $parameters
      * @return \Dionchaika\Container\FactoryInterface
      */
-    public function singleton(string $id, $type = null): FactoryInterface
+    public function singleton(string $id, $type = null, array $parameters = []): FactoryInterface
     {
-        return $this->bind($id, $type, true);
+        return $this->bind($id, $type, true, $parameters);
     }
 
     /**
@@ -162,20 +173,14 @@ class Container implements ContainerInterface
      * Make the instance of the type.
      *
      * @param string  $id
-     * @param mixed[] $params
+     * @param mixed[] $parameters
      * @return mixed
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function make(string $id, array $params = [])
+    public function make(string $id, array $parameters = [])
     {
         if (!$this->has($id)) {
-            $this->bind($id);
-
-            foreach ($params as $name => $value) {
-                $this->factories
-                    ->get($id)
-                    ->bindParameter($name, $value);
-            }
+            $this->bind($id, null, false, $parameters);
         }
 
         if (isset($this->instances[$id])) {
@@ -221,11 +226,11 @@ class Container implements ContainerInterface
      *
      * @param string|mixed $type
      * @param string       $method
-     * @param mixed[]      $params
+     * @param mixed[]      $parameters
      * @return mixed
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function call($type, $method, array $params = [])
+    public function call($type, $method, array $parameters = [])
     {
         if (is_string($type)) {
             $type = $this->make($type);
@@ -237,16 +242,16 @@ class Container implements ContainerInterface
             throw new ContainerException($e->getMessage());
         }
 
-        $parameters = array_map(function ($parameter) use ($params) {
+        $methodParameters = array_map(function ($parameter) use ($parameters) {
             $this->resolveParameter(
                 $this,
                 $parameter,
-                new ParameterCollection($params)
+                new ParameterCollection($parameters)
             );
         }, $method->getParameters());
 
         try {
-            return $method->invokeArgs($type, $parameters);
+            return $method->invokeArgs($type, $methodParameters);
         } catch (ReflectionException $e) {
             throw new ContainerException($e->getMessage());
         }
@@ -260,12 +265,14 @@ class Container implements ContainerInterface
      */
     protected function getClosure($type): Closure
     {
-        return is_string($type)
-            ? function ($container, $params) use ($type) {
-                return $container
-                    ->getResolver()
-                    ->resolve($container, $type, $params);
-            }
-            : function () use ($type) { return $type; };
+        if (!is_string($type)) {
+            return function () use ($type) { return $type; };
+        }
+
+        return function ($container, $parameters) use ($type) {
+            return $container
+                ->getResolver()
+                ->resolve($container, $type, $parameters);
+        };
     }
 }
