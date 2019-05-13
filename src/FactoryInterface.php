@@ -31,15 +31,6 @@ interface FactoryInterface
     public function isSingleton(): bool;
 
     /**
-     * Bind parameter.
-     *
-     * @param string         $name
-     * @param \Closure|mixed $value
-     * @return \Dionchaika\Container\FactoryInterface
-     */
-    public function bindParameter(string $name, $value): FactoryInterface;
-
-    /**
      * Get instance.
      *
      * @param \Psr\Container\ContainerInterface $container
