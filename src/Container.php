@@ -14,8 +14,6 @@ namespace Dionchaika\Container;
 use Closure;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use Dionchaika\Container\Interfaces\FactoryInterface;
-use Dionchaika\Container\Interfaces\ResolverInterface;
 use Dionchaika\Container\Resolvers\ConstructorResolver;
 
 class Container implements ContainerInterface
