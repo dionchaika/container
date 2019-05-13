@@ -40,29 +40,6 @@ class Container implements ContainerInterface
     protected $instances = [];
 
     /**
-     * Allowed container config options:
-     *
-     *      1.  resolver (
-     *              \Dionchaika\Container\ResolverInterface,
-     *              default: \Dionchaika\Container\Resolvers\ConstructorResolver
-     *          ) - the default resolver.
-     *      2.  factories (
-     *              \Dionchaika\Container\FactoryInterface[],
-     *              default: empty
-     *          ) - the array of default factories.
-     *          <code>
-     *              $container = new Container([
-     *
-     *                  'factories' => [
-     *
-     *                      new Factory('pdo', 'PDO'),
-     *                      new Factory('logger', 'LoggerInterface')
-     *
-     *                  ]
-     *
-     *              ]);
-     *          </code>
-     *
      * @param mixed[] $config
      * @throws \InvalidArgumentException
      */
