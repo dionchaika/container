@@ -45,6 +45,13 @@ class Container implements ContainerInterface
     protected $instances = [];
 
     /**
+     * Is autoresolve enabled.
+     *
+     * @var bool
+     */
+    protected $autoResolveEnabled = true;
+
+    /**
      * @param mixed[] $config
      * @throws \InvalidArgumentException
      */
@@ -61,6 +68,10 @@ class Container implements ContainerInterface
             $this->resolver = $config['resolver'];
         } else {
             $this->resolver = new ConstructorResolver;
+        }
+
+        if (isset($config['autoresolve'])) {
+            $this->autoResolveEnabled = $config['autoresolve'];
         }
 
         $this->factories = new FactoryCollection(
@@ -96,6 +107,16 @@ class Container implements ContainerInterface
     public function getInstances(): array
     {
         return $this->instances;
+    }
+
+    /**
+     * Check is autoresolve enabled.
+     *
+     * @return bool
+     */
+    public function isAutoresolveEnabled(): bool
+    {
+        return $this->autoResolveEnabled;
     }
 
     /**
