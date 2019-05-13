@@ -12,12 +12,17 @@
 namespace Dionchaika\Container;
 
 use Closure;
+use ReflectionMethod;
+use ReflectionException;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
+use Dionchaika\Container\Resolvers\ResolverTrait;
 use Dionchaika\Container\Resolvers\ConstructorResolver;
 
 class Container implements ContainerInterface
 {
+    use ResolverTrait;
+
     /**
      * The default resolver.
      *
@@ -157,16 +162,16 @@ class Container implements ContainerInterface
      * Resolve the instance of the type.
      *
      * @param string  $id
-     * @param mixed[] $parameters
+     * @param mixed[] $params
      * @return mixed
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function resolve(string $id, array $parameters = [])
+    public function resolve(string $id, array $params = [])
     {
         if (!$this->has($id)) {
             $this->bind($id);
 
-            foreach ($parameters as $key => $value) {
+            foreach ($params as $key => $value) {
                 if (is_int($key)) {
                     $this->factories
                         ->get($id)
@@ -215,6 +220,42 @@ class Container implements ContainerInterface
         }
 
         return $this->resolve($id);
+    }
+
+    /**
+     * Call a method resolving parameters.
+     *
+     * @param string|mixed $type
+     * @param string       $method
+     * @param mixed[]      $params
+     * @return mixed
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    public function call($type, $method, array $params = [])
+    {
+        if (is_string($type)) {
+            $type = $this->resolve($type);
+        }
+
+        try {
+            $method = new ReflectionMethod($type, $method);
+        } catch (ReflectionException $e) {
+            throw new ContainerException($e->getMessage());
+        }
+
+        $parameters = array_map(function ($parameter) use ($params) {
+            $this->resolveParameter(
+                $this,
+                $parameter,
+                new ParameterCollection($params)
+            );
+        }, $method->getParameters());
+
+        try {
+            return $method->invokeArgs($type, $parameters);
+        } catch (ReflectionException $e) {
+            throw new ContainerException($e->getMessage());
+        }
     }
 
     /**
