@@ -77,7 +77,10 @@ class Container implements ContainerInterface
             $this->resolver = new ConstructorResolver;
         }
 
-        if (isset($config['autoresolving'])) {
+        if (isset(
+            $config['autoresolving']) &&
+            is_bool($config['autoresolving'])
+        ) {
             $this->enableAutoresolving = $config['autoresolving'];
         }
 
