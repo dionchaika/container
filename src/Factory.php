@@ -55,7 +55,7 @@ class Factory implements FactoryInterface
     public function __construct(
         string $name,
         Closure $closure,
-        bool $singleton = false,
+        bool $singleton                  = false,
         ?ParameterCollection $parameters = null
     ) {
         $this->name = $name;
