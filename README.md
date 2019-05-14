@@ -120,6 +120,16 @@ $container->bind('some_class', 'SomeClass')
     ->bindParameter('name', 'Max');
 
 //
+// If some of the parameters requires the container
+// pass a closure as the parameter value:
+//
+$container->bind('some_class', 'SomeClass')
+    ->bindParameter('id', 10)
+    ->bindParameter('name', function ($container) {
+        return $container->get('name');
+    });
+
+//
 // You can pass a parameter collection
 // as the second argument of the closure:
 //
