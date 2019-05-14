@@ -25,8 +25,8 @@ use Dionchaika\Container\Container;
 $container = new Container;
 
 //
-// To use global container instance
-// use getInstance method:
+// To use global container
+// instance use getInstance method:
 //
 $container = Container::getInstance();
 ```
@@ -242,7 +242,7 @@ $instance = $container->get('SomeClass');
 class SomeClass
 {
     //
-    // Just define a property type in DocBlock:
+    // Just define a property type in DocBlocks:
     //
 
     /**
