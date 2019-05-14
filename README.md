@@ -56,14 +56,14 @@ $container->instance('some_instance', new SomeClass);
 $container->instance('another_instance', ['foo' => 'bar', 'baz' => 'bat']);
 
 //
-// To retrieve the instance call get method:
+// To retrieve an instance call get method:
 //
 if ($container->has('SomeClass')) {
     $someInstance = $container->get('SomeClass');
 }
 
 //
-// You can also make the instance without binding:
+// You can also make an instance without binding:
 //
 $oneMoreInstance = $container->make('OneMoreClass');
 ```
