@@ -202,7 +202,14 @@ $container->call(new SomeClass, 'foo', ['id' => 10, 'name' => 'Max']);
 
 class SomeClass
 {
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
+
+    /**
+     * @var \Psr\Http\Message\RequestInterface
+     */
     protected $request;
 
     public function __construct()
