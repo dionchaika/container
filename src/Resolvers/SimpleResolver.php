@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 use Dionchaika\Container\ResolverInterface;
 use Dionchaika\Container\ParameterCollection;
 
-class BaseResolver implements ResolverInterface
+class SimpleResolver implements ResolverInterface
 {
     /**
      * Resolve the instance of the type.
