@@ -90,6 +90,7 @@ $container->bind(AnotherClass::class, function ($container) {
 <?php
 
 $container->bind('SomeClass', 'SomeInterface');
+$container->bind(AnotherClass::class, AnotherInterface::class);
 
 //
 // or use an alias name of the interface:
