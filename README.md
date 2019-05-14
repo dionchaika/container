@@ -276,7 +276,7 @@ class SomeClass
 }
 
 //
-// Configure the container to property injection:
+// Configure the container for property injection:
 //
 $container = new Container(['resolver' => new PropertyResolver]);
 
