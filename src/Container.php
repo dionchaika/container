@@ -52,6 +52,13 @@ class Container implements ContainerInterface
     protected $instances = [];
 
     /**
+     * The container global instance.
+     *
+     * @var \Dionchaika\Container\Container
+     */
+    protected static $instance;
+
+    /**
      * @param mixed[] $config
      * @throws \InvalidArgumentException
      */
@@ -77,6 +84,22 @@ class Container implements ContainerInterface
         $this->factories = new FactoryCollection(
             isset($config['factories']) ? $config['factories'] : []
         );
+    }
+
+    /**
+     * Get the container global instance.
+     *
+     * @param mixed[] $config
+     * @return \Dionchaika\Container\Container
+     * @throws \InvalidArgumentException
+     */
+    public static function getInstance(array $config = []): Container
+    {
+        if (null === static::$instance) {
+            static::$instance = new static($config);
+        }
+
+        return static::$instance;
     }
 
     /**
