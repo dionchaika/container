@@ -152,7 +152,7 @@ $container->bind('some_class', function ($container, $parameters) {
 //
 // You can also pass the array of parameters to bind method:
 //
-$container->bind('some_class', SomeClass::class, false, [
+$container->bind('some_class', 'SomeClass', false, [
 
     'id'   => 10,
     'name' => 'Max'
