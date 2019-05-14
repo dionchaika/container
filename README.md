@@ -18,8 +18,7 @@ require_once 'vendor/autoload.php';
 ## Basic usage
 1. Simple binding:
 ```php
-
-$container = new Container;
+<?php
 
 $container->bind('SomeClass');
 $container->bind(AnotherClass::class);
@@ -58,8 +57,6 @@ $oneMoreInstance = $container->make('OneMoreClass');
 ```php
 <?php
 
-$container = new Container;
-
 $container->bind('SomeClass', function () {
     return new SomeClass;
 });
@@ -76,8 +73,6 @@ $container->bind(AnotherClass::class, function ($container) {
 3. Binding an interface:
 ```php
 <?php
-
-$container = new Container;
 
 $container->bind('SomeClass', 'SomeInterface');
 
@@ -108,8 +103,6 @@ class SomeClass
         //
     }
 }
-
-$container = new Container;
 
 //
 // To bind parameters use bindParameter method:
@@ -157,6 +150,7 @@ $instance = $container->make(SomeClass::class, ['id' => 10, 'name' => 'Max']);
 
 5. Calling methods:
 ```php
+<?php
 
 class SomeClass
 {
@@ -170,8 +164,6 @@ class SomeClass
         //
     }
 }
-
-$container = new Container;
 
 $container->bind('some_class', 'SomeClass');
 
