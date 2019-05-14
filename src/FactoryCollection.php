@@ -94,7 +94,7 @@ class FactoryCollection
     }
 
     /**
-     * Delete a factory
+     * Delete factory
      * from the collection.
      *
      * @param string $name

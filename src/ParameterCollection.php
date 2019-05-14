@@ -93,7 +93,7 @@ class ParameterCollection
     }
 
     /**
-     * Delete a parameter
+     * Delete parameter
      * from the collection.
      *
      * @param string $name
