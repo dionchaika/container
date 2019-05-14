@@ -23,20 +23,27 @@ class FactoryCollection
     protected $factories = [];
 
     /**
+     * The array of all of the factories.
+     *
+     * @var \Dionchaika\Container\FactoryInterface[]
+     */
+    protected $allFactories = [];
+
+    /**
      * @param \Dionchaika\Container\FactoryInterface[] $factories
      * @throws \InvalidArgumentException
      */
     public function __construct(array $factories = [])
     {
         foreach ($factories as $factory) {
-            if ($factory instanceof FactoryInterface) {
-                $this->add($factory);
-            } else {
+            if (!($factory instanceof FactoryInterface)) {
                 throw new InvalidArgumentException(
                     'Factory must be an instance of '
                     .'\\Dionchaika\\Container\\FactoryInterface!'
                 );
             }
+
+            $this->add($factory);
         }
     }
 
@@ -49,18 +56,18 @@ class FactoryCollection
      */
     public function add(FactoryInterface $factory): FactoryInterface
     {
+        $this->allFactories[] = $factory;
         return $this->factories[$factory->getName()] = $factory;
     }
 
     /**
-     * Get all factories
-     * of the collection.
+     * Get all of the factories in the collection.
      *
-     * @return mixed[]
+     * @return \Dionchaika\Container\FactoryInterface[]
      */
     public function all(): array
     {
-        return $this->factories;
+        return $this->allFactories;
     }
 
     /**
