@@ -217,6 +217,11 @@ class SomeClass
         //
     }
 
+    //
+    // Just define methods starting with "set"
+    // and pass class dependencies as its arguments:
+    //
+
     /**
      * @param \Psr\Log\LoggerInterface
      * @return void
