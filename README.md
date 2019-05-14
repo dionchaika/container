@@ -27,8 +27,7 @@ $container->bind(AnotherClass::class);
 //
 // Binding a singleton:
 //
-$container->bind('SomeClass')
-    ->asSingleton();
+$container->bind('SomeClass')->asSingleton();
 
 //
 // or use singleton method:
