@@ -186,7 +186,7 @@ $container->bind('some_class', 'SomeClass');
 
 //
 // To invoke a class method
-// resolving parameters use call method:
+// retrieving parameters use call method:
 //
 $container->call('some_class', 'foo', ['id' => 10, 'name' => 'Max']);
 
