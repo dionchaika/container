@@ -162,7 +162,7 @@ $container->bind('some_class', 'SomeClass', false, [
 //
 // or make an instance with parameters:
 //
-$instance = $container->make(SomeClass::class, ['id' => 10, 'name' => 'Max']);
+$someInstance = $container->make('SomeClass', ['id' => 10, 'name' => 'Max']);
 ```
 
 6. Calling methods:
@@ -234,7 +234,7 @@ class SomeClass
 //
 $container = new Container(['resolver' => new SetterResolver]);
 
-$instance = $container->get('SomeClass');
+$someInstance = $container->get('SomeClass');
 ```
 
 8. Property injection:
@@ -268,5 +268,5 @@ class SomeClass
 //
 $container = new Container(['resolver' => new PropertyResolver]);
 
-$instance = $container->get('SomeClass');
+$someInstance = $container->get('SomeClass');
 ```
