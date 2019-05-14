@@ -146,8 +146,8 @@ class Container implements ContainerInterface
      */
     public function bind(
         string $id,
-        $type = null,
-        bool $singleton = false,
+        $type             = null,
+        bool $singleton   = false,
         array $parameters = []
     ): FactoryInterface {
         unset($this->instances[$id]);
