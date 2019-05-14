@@ -242,7 +242,7 @@ class SomeClass
 }
 
 //
-// Configure the container to setter injection:
+// Configure the container for setter injection:
 //
 $container = new Container(['resolver' => new SetterResolver]);
 
@@ -256,7 +256,7 @@ $someInstance = $container->get('SomeClass');
 class SomeClass
 {
     //
-    // Just define a property type in DocBlocks:
+    // Just define a property type in doc comments:
     //
 
     /**
