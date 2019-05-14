@@ -44,7 +44,11 @@ class SetterResolver extends ConstructorResolver implements ResolverInterface
         }
 
         $callback = function ($parameter) use ($container, $parameters) {
-            return $this->resolveParameter($container, $parameter, $parameters);
+            return $this->resolveParameter(
+                $container,
+                $parameter,
+                $parameters
+            );
         };
 
         foreach ($class->getMethods() as $method) {

@@ -297,7 +297,10 @@ class Container implements ContainerInterface
             );
         };
 
-        $methodParameters = array_map($callback, $method->getParameters());
+        $methodParameters = array_map(
+            $callback,
+            $method->getParameters()
+        );
 
         try {
             return $method->invokeArgs($type, $methodParameters);
