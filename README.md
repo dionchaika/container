@@ -45,13 +45,13 @@ $container->instance('another_instance', ['foo' => 'bar', 'baz' => 'bat']);
 // To retrieve the instance call get method:
 //
 if ($container->has('SomeClass')) {
-    $instance = $container->get('SomeClass');
+    $someInstance = $container->get('SomeClass');
 }
 
 //
 // You can also make the instance without binding:
 //
-$instance = $container->make('OneMoreClass');
+$oneMoreInstance = $container->make('OneMoreClass');
 ```
 
 2. Binding a closure:
