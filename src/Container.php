@@ -263,18 +263,94 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Call a method
-     * or a function
-     * resolving parameters.
+     * Call a function resolving parameters.
      *
-     * @param \Closure|string|mixed[] $callable
-     * @param mixed[]                 $parameters
+     * @param callback $function
+     * @param mixed[]  $parameters
      * @return mixed
      * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function call($callable, array $parameters = [])
+    public function call(callable $function, array $parameters = [])
     {
-        
+        try {
+            $function = new ReflectionFunction($function);
+        } catch (ReflectionException $e) {
+            throw new ContainerException($e->getMessage());
+        }
+
+        $params = [];
+        foreach ($parameters as $name => $value) {
+            $params[] = new Parameter($name, $value);
+        }
+
+        $params = !empty($params) ? new ParameterCollection($params) : null;
+
+        $callback = function ($parameter) use ($params) {
+            return $this->resolveParameter(
+                $this,
+                $parameter,
+                $params
+            );
+        };
+
+        $functionParameters = array_map(
+            $callback,
+            $function->getParameters()
+        );
+
+        try {
+            return $function->invokeArgs($functionParameters);
+        } catch (ReflectionException $e) {
+            throw new ContainerException($e->getMessage());
+        }
+    }
+
+    /**
+     * Call a method resolving parameters.
+     *
+     * @param string|mixed $type
+     * @param string       $method
+     * @param mixed[]      $parameters
+     * @return mixed
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    public function callMethod($type, string $method = '__invoke', array $parameters = [])
+    {
+        if (is_string($type)) {
+            $type = $this->make($type);
+        }
+
+        try {
+            $method = new ReflectionMethod($type, $method);
+        } catch (ReflectionException $e) {
+            throw new ContainerException($e->getMessage());
+        }
+
+        $params = [];
+        foreach ($parameters as $name => $value) {
+            $params[] = new Parameter($name, $value);
+        }
+
+        $params = !empty($params) ? new ParameterCollection($params) : null;
+
+        $callback = function ($parameter) use ($params) {
+            return $this->resolveParameter(
+                $this,
+                $parameter,
+                $params
+            );
+        };
+
+        $methodParameters = array_map(
+            $callback,
+            $method->getParameters()
+        );
+
+        try {
+            return $method->invokeArgs($type, $methodParameters);
+        } catch (ReflectionException $e) {
+            throw new ContainerException($e->getMessage());
+        }
     }
 
     /**
