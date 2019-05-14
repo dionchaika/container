@@ -165,7 +165,31 @@ $container->bind('some_class', 'SomeClass', false, [
 $someInstance = $container->make('SomeClass', ['id' => 10, 'name' => 'Max']);
 ```
 
-6. Calling methods:
+6. Calling functions and closures:
+```php
+<?php
+
+function foo(int $id, string $name): void
+{
+    //
+}
+
+//
+// To invoke a function
+// retrieving arguments use call method:
+//
+$container->call('foo', ['id' => 10, 'name' => 'Max']);
+
+//
+// You can also invoke a closure using call method:
+//
+$closure = function (int $id, string $name) {
+    //
+};
+$container->call($closure, ['id' => 10, 'name' => 'Max']);
+```
+
+7. Calling class methods:
 ```php
 <?php
 
@@ -186,17 +210,17 @@ $container->bind('some_class', 'SomeClass');
 
 //
 // To invoke a class method
-// retrieving arguments use call method:
+// retrieving arguments use callMethod method:
 //
-$container->call('some_class', 'foo', ['id' => 10, 'name' => 'Max']);
+$container->callMethod('some_class', 'foo', ['id' => 10, 'name' => 'Max']);
 
 //
-// You can also pass an entire instance to call method:
+// You can also pass an entire instance to callMethod method:
 //
-$container->call(new SomeClass, 'foo', ['id' => 10, 'name' => 'Max']);
+$container->callMethod(new SomeClass, 'foo', ['id' => 10, 'name' => 'Max']);
 ```
 
-7. Setter injection:
+8. Setter injection:
 ```php
 <?php
 
@@ -249,7 +273,7 @@ $container = new Container(['resolver' => new SetterResolver]);
 $someInstance = $container->get('SomeClass');
 ```
 
-8. Property injection:
+9. Property injection:
 ```php
 <?php
 
