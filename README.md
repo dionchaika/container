@@ -36,6 +36,13 @@ $container->bind('SomeClass')
 $container->singleton(AnotherClass::class);
 
 //
+// To bind an entire instance
+// you can use instance method:
+//
+$container->instance('some_instance', new SomeClass);
+$container->instance('another_instance', ['foo' => 'bar', 'baz' => 'bat']);
+
+//
 // To resolve the instance call get method:
 //
 if ($container->has('SomeClass')) {
