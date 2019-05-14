@@ -16,7 +16,22 @@ require_once 'vendor/autoload.php';
 ```
 
 ## Basic usage
-1. Simple binding:
+1. Configuration:
+```php
+<?php
+
+use Dionchaika\Container\Container;
+
+$container = new Container;
+
+//
+// To use global container instance
+// use getInstance method:
+//
+$container = Container::getInstance();
+```
+
+2. Simple binding:
 ```php
 <?php
 
@@ -53,7 +68,7 @@ if ($container->has('SomeClass')) {
 $oneMoreInstance = $container->make('OneMoreClass');
 ```
 
-2. Binding a closure:
+3. Binding a closure:
 ```php
 <?php
 
@@ -70,7 +85,7 @@ $container->bind(AnotherClass::class, function ($container) {
 });
 ```
 
-3. Binding an interface:
+4. Binding an interface:
 ```php
 <?php
 
@@ -87,7 +102,7 @@ $container->bind('logger', '\Psr\Log\LoggerInterface');
 $logger = $container->get('logger');
 ```
 
-4. Binding parameters:
+5. Binding parameters:
 ```php
 <?php
 
@@ -148,7 +163,7 @@ $container->bind('some_class', SomeClass::class, false, [
 $instance = $container->make(SomeClass::class, ['id' => 10, 'name' => 'Max']);
 ```
 
-5. Calling methods:
+6. Calling methods:
 ```php
 <?php
 
@@ -179,7 +194,7 @@ $container->call('some_class', 'foo', ['id' => 10, 'name' => 'Max']);
 $container->call(new SomeClass, 'foo', ['id' => 10, 'name' => 'Max']);
 ```
 
-6. Setter injection:
+7. Setter injection:
 ```php
 <?php
 
@@ -220,7 +235,7 @@ $container = new Container(['resolver' => new SetterResolver]);
 $instance = $container->get('SomeClass');
 ```
 
-7. Property injection:
+8. Property injection:
 ```php
 <?php
 
