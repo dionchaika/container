@@ -160,7 +160,7 @@ $container->bind('some_class', 'SomeClass', false, [
 ]);
 
 //
-// or make the instance with parameters:
+// or make an instance with parameters:
 //
 $instance = $container->make(SomeClass::class, ['id' => 10, 'name' => 'Max']);
 ```
