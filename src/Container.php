@@ -54,7 +54,7 @@ class Container implements ContainerInterface
     /**
      * The container global instance.
      *
-     * @var \Psr\Container\ContainerInterface
+     * @var \Dionchaika\Container\Container
      */
     protected static $instance;
 
@@ -90,10 +90,10 @@ class Container implements ContainerInterface
      * Get the container global instance.
      *
      * @param mixed[] $config
-     * @return \Psr\Container\ContainerInterface
+     * @return \Dionchaika\Container\Container
      * @throws \InvalidArgumentException
      */
-    public static function getInstance(array $config = []): ContainerInterface
+    public static function getInstance(array $config = []): Container
     {
         if (null === static::$instance) {
             static::$instance = new static($config);
