@@ -120,8 +120,7 @@ $container->bind('some_class', 'SomeClass')
     ->bindParameter('name', 'Max');
 
 //
-// If some of the parameters requires the container
-// pass a closure as the parameter value:
+// You can also pass a closure as the parameter value:
 //
 $container->bind('some_class', 'SomeClass')
     ->bindParameter('id', 10)
