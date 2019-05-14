@@ -21,7 +21,7 @@ use Dionchaika\Container\ParameterCollection;
 class PropertyResolver extends ConstructorResolver implements ResolverInterface
 {
     /**
-     * Resolve an instance of the type.
+     * Resolve the instance of the type.
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param string                                         $type

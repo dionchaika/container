@@ -9,11 +9,13 @@
  * @author Dion Chaika <dionchaika@gmail.com>
  */
 
-namespace Dionchaika\Container;
+namespace Dionchaika\Container\Resolvers;
 
 use Psr\Container\ContainerInterface;
+use Dionchaika\Container\ResolverInterface;
+use Dionchaika\Container\ParameterCollection;
 
-interface ResolverInterface
+class BaseResolver implements ResolverInterface
 {
     /**
      * Resolve the instance of the type.
@@ -29,5 +31,7 @@ interface ResolverInterface
         ContainerInterface $container,
         string $type,
         ?ParameterCollection $parameters = null
-    );
+    ) {
+        return $container->get($type);
+    }
 }

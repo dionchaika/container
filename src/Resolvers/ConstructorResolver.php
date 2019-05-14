@@ -23,7 +23,7 @@ class ConstructorResolver implements ResolverInterface
     use ResolverTrait;
 
     /**
-     * Resolve an instance of the type.
+     * Resolve the instance of the type.
      *
      * @param \Psr\Container\ContainerInterface              $container
      * @param string                                         $type
