@@ -43,16 +43,16 @@ $container->instance('some_instance', new SomeClass);
 $container->instance('another_instance', ['foo' => 'bar', 'baz' => 'bat']);
 
 //
-// To resolve the instance call get method:
+// To retrieve the instance call get method:
 //
 if ($container->has('SomeClass')) {
     $instance = $container->get('SomeClass');
 }
 
 //
-// You can also resolve the instance without binding:
+// You can also make the instance without binding:
 //
-$instance = $container->resolve('OneMoreClass');
+$instance = $container->make('OneMoreClass');
 ```
 
 2. Binding a closure:
@@ -88,7 +88,7 @@ $container->bind('SomeClass', 'SomeInterface');
 $container->bind('logger', '\Psr\Log\LoggerInterface');
 
 //
-// Will resolve an instance of \Psr\Log\LoggerInterface:
+// Will retrieve an instance of \Psr\Log\LoggerInterface:
 //
 $logger = $container->get('logger');
 ```
@@ -100,11 +100,11 @@ $logger = $container->get('logger');
 class SomeClass
 {
     /**
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param int                      $id
-     * @param string                   $name
+     * @param \AnotherClass $someInstance
+     * @param int           $id
+     * @param string        $name
      */
-    public function __construct(LoggerInterface $logger, int $id, string $name)
+    public function __construct(AnotherClass $someInstance, int $id, string $name)
     {
         //
     }
@@ -112,6 +112,9 @@ class SomeClass
 
 $container = new Container;
 
+//
+// To bind parameters use bindParameter method:
+//
 $container->bind('some_class', 'SomeClass')
     ->bindParameter('id', 10)
     ->bindParameter('name', 'Max');
@@ -122,14 +125,61 @@ $container->bind('some_class', 'SomeClass')
 //
 $container->bind('some_class', function ($container, $parameters) {
     return new SomeClass(
-        $container->get('logger'),
+        $container->get(AnotherClass::class),
         $parameters->get('id')->getValue(),
         $parameters->get('name')->getValue()
     );
 })->bindParameter('id', 10)->bindParameter('name', 'Max');
+
+//
+// You can also pass the array of parameters to bind method:
+//
+$container->bind('some_class', SomeClass::class, false, [
+
+    'id'   => 10,
+    'name' => 'Max'
+
+]);
+
+//
+// or make the instance with parameters:
+//
+$instance = $container->make(SomeClass::class, ['id' => 10, 'name' => 'Max']);
 ```
 
-5. Setter injection:
+5. Calling methods:
+```php
+
+class SomeClass
+{
+    /**
+     * @param int    $id
+     * @param string $name
+     * @return void
+     */
+    public function foo(int $id, string $name): void
+    {
+        //
+    }
+}
+
+$container = new Container;
+
+$container->bind('some_class', 'SomeClass');
+
+//
+// To invoke a class method
+// resolving parameters use call method:
+//
+$container->call('some_class', 'foo', ['id' => 10, 'name' => 'Max']);
+
+//
+// You can also pass an entire instance to call method:
+//
+$container->call(new SomeClass, 'foo', ['id' => 10, 'name' => 'Max']);
+```
+
+6. Setter injection:
 ```php
 <?php
 
@@ -170,7 +220,7 @@ $container = new Container(['resolver' => new SetterResolver]);
 $instance = $container->get('SomeClass');
 ```
 
-5. Property injection:
+7. Property injection:
 ```php
 <?php
 
