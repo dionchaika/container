@@ -25,7 +25,7 @@ class Container implements ContainerInterface
     use ResolverTrait;
 
     /**
-     * Enable autoresolving.
+     * Enable the autoresolving.
      *
      * @var bool
      */
