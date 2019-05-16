@@ -29,6 +29,11 @@ $container = new Container;
 // instance use getInstance method:
 //
 $container = Container::getInstance();
+
+//
+// Disable the autoresolving if you need:
+//
+$container->enableAutoresolving = false;
 ```
 
 2. Simple binding:
@@ -169,7 +174,7 @@ $someInstance = $container->make('SomeClass', ['id' => 10, 'name' => 'Max']);
 ```php
 <?php
 
-function foo(int $id, string $name): void
+function foo(SomeClass $someInstance, int $id, string $name): void
 {
     //
 }
@@ -183,7 +188,7 @@ $container->call('foo', ['id' => 10, 'name' => 'Max']);
 //
 // You can also invoke a closure using call method:
 //
-$closure = function (int $id, string $name) {
+$closure = function (SomeClass $someInstance, int $id, string $name) {
     //
 };
 $container->call($closure, ['id' => 10, 'name' => 'Max']);
@@ -200,7 +205,7 @@ class SomeClass
      * @param string $name
      * @return void
      */
-    public function foo(int $id, string $name): void
+    public function foo(AnotherClass $someInstance, int $id, string $name): void
     {
         //
     }
