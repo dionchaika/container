@@ -307,7 +307,7 @@ class SomeClass
 }
 
 //
-// Configure the container for method injection:
+// Configure the container for the method injection:
 //
 $container = new Container(['resolver' => new MethodResolver]);
 
@@ -360,7 +360,7 @@ class SomeClass
 }
 
 //
-// Configure the container for property injection:
+// Configure the container for the property injection:
 //
 $container = new Container(['resolver' => new PropertyResolver]);
 
