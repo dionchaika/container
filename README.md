@@ -307,9 +307,9 @@ class SomeClass
 }
 
 //
-// Configure the container for setter injection:
+// Configure the container for method injection:
 //
-$container = new Container(['resolver' => new SetterResolver]);
+$container = new Container(['resolver' => new MethodResolver]);
 
 $someInstance = $container->make('SomeClass', ['id' => 10, 'name' => 'Max']);
 ```
