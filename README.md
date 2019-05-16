@@ -225,12 +225,22 @@ $container->callMethod('some_class', 'foo', ['id' => 10, 'name' => 'Max']);
 $container->callMethod(new SomeClass, 'foo', ['id' => 10, 'name' => 'Max']);
 ```
 
-8. Setter injection:
+8. Method injection:
 ```php
 <?php
 
 class SomeClass
 {
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $name;
+
     /**
      * @var \Psr\Log\LoggerInterface
      */
@@ -247,12 +257,36 @@ class SomeClass
     }
 
     //
-    // Just define methods starting with "set"
-    // and pass class dependencies as its arguments:
+    // Just define a method with @Inject annotation
+    // in doc comment and pass class dependencies as method arguments:
     //
 
     /**
-     * @param \Psr\Log\LoggerInterface
+     * @Inject
+     *
+     * @param int $id
+     * @return void
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @Inject
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @Inject
+     *
+     * @param \Psr\Log\LoggerInterface $logger
      * @return void
      */
     public function setLogger(LoggerInterface $logger): void
@@ -261,7 +295,9 @@ class SomeClass
     }
 
     /**
-     * @param \Psr\Http\Message\RequestInterface
+     * @Inject
+     *
+     * @param \Psr\Http\Message\RequestInterface $request
      * @return void
      */
     public function setRequest(RequestInterface $request): void
@@ -275,7 +311,7 @@ class SomeClass
 //
 $container = new Container(['resolver' => new SetterResolver]);
 
-$someInstance = $container->get('SomeClass');
+$someInstance = $container->make('SomeClass', ['id' => 10, 'name' => 'Max']);
 ```
 
 9. Property injection:
@@ -285,15 +321,34 @@ $someInstance = $container->get('SomeClass');
 class SomeClass
 {
     //
-    // Just define a property type in doc comments:
+    // Just define a property type
+    // in doc comment with @Inject annotation:
     //
 
     /**
+     * @Inject
+     *
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @Inject
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @Inject
+     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
+     * @Inject
+     *
      * @var \Psr\Http\Message\RequestInterface
      */
     protected $request;
@@ -309,5 +364,5 @@ class SomeClass
 //
 $container = new Container(['resolver' => new PropertyResolver]);
 
-$someInstance = $container->get('SomeClass');
+$someInstance = $container->make('SomeClass', ['id' => 10, 'name' => 'Max']);
 ```

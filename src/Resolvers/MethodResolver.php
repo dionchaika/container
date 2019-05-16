@@ -18,7 +18,7 @@ use Dionchaika\Container\ResolverInterface;
 use Dionchaika\Container\ContainerException;
 use Dionchaika\Container\ParameterCollection;
 
-class SetterResolver extends ConstructorResolver implements ResolverInterface
+class MethodResolver extends ConstructorResolver implements ResolverInterface
 {
     /**
      * Resolve the instance of the type.
@@ -52,14 +52,14 @@ class SetterResolver extends ConstructorResolver implements ResolverInterface
         };
 
         foreach ($class->getMethods() as $method) {
-            if (0 === strpos($method->name, 'set')) {
-                $setterParameters = array_map(
+            if (preg_match('/\@Inject\s+/', $method->getDocComment())) {
+                $methodParameters = array_map(
                     $callback,
                     $method->getParameters()
                 );
 
                 try {
-                    $method->invokeArgs($instance, $setterParameters);
+                    $method->invokeArgs($instance, $methodParameters);
                 } catch (ReflectionException $e) {
                     throw new ContainerException($e->getMessage());
                 }
