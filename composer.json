@@ -25,6 +25,8 @@
             "Dionchaika\\Container\\": "src/"
         }
     },
+    "prefer-stable": true,
+    "minimum-stability": "dev",
     "require": {
         "php": "^7.1.3",
         "psr/container": "^1.0"
