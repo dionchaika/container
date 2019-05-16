@@ -44,7 +44,10 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
         }
 
         foreach ($class->getProperties() as $property) {
-            if (preg_match('/\@Inject\s+\@var +([\w\\\]+)/', $property->getDocComment(), $matches)) {
+            if (
+                preg_match('/\@Inject\s+/', $property->getDocComment()) &&
+                preg_match('/\@var +([\w\\\]+)/', $property->getDocComment(), $matches)
+            ) {
                 $property->setAccessible(true);
 
                 if (
