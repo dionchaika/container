@@ -60,9 +60,11 @@ class PropertyResolver extends ConstructorResolver implements ResolverInterface
                             ->getValue($container)
                     );
                 } else {
+                    $type = ltrim($matches[1], '\\');
+
                     $property->setValue(
                         $instance,
-                        $container->enableAutoresolving ? $container->make($matches[1]) : $container->get($matches[1])
+                        $container->enableAutoresolving ? $container->make($type) : $container->get($type)
                     );
                 }
             }
